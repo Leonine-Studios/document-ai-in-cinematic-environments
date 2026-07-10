@@ -3,7 +3,7 @@
  * Run from repo root: node demo/magnific-chrome-extension/test/push-payload-check.mjs
  */
 
-import { assetSchema } from "@daice-chain/core";
+import { assetSchema } from "@leoninestudios/daice-chain-core";
 import { buildPushPayload } from "../editor-bridge.js";
 import { finalizeFragment, creationToDraft } from "../magnific.js";
 import { folderListing, owner } from "./fixtures.magnific-api.mjs";

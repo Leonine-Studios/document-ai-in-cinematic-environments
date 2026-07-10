@@ -50,7 +50,7 @@ A viewer and an editor are distinct roles (see [`glossary.md`](glossary.md)): a 
 - Provide a way to browse the package's assets and to inspect any asset's lineage (its unfolded reference chain). A package may document many assets (dozens to hundreds) with several independent lineages side by side; whatever UI satisfies this MUST scale to that without requiring every lineage open at once. This document does not prescribe a specific UI pattern for satisfying this (table, tree, hierarchical table, or otherwise) — see this repository's own viewer for one example approach.
 - Be read-only: a viewer MUST NOT offer editing, re-export, package assembly, or conversion to another format (PDF, spreadsheet, or otherwise). These are editor-class (or other separate-tool) capabilities — see §2 and §3 — deliberately kept out of the viewer to keep it small and safe to embed, unmodified, in any package that chooses to include one.
 - Automatically load and render only its own package: whenever the runtime permits it (an inline data block, or `fetch` when served over HTTP(S)), a viewer MUST load with zero user interaction. It MUST NOT present itself as a general-purpose tool for opening arbitrary DAICE-Chain packages. Over `file://`, where browsers block a page from reading local files automatically, a viewer MAY fall back to prompting the user to select this same package's own `daice.json` (and, optionally, its own `assets/` folder) — a narrow accommodation for that sandboxing, not a standing invitation to browse to an unrelated package.
-- Keep its own file footprint minimal: `index.html`, exactly one JavaScript file (with any library dependency, such as `@daice-chain/core`, inlined into it — no separate vendor script or library folder), and at most one CSS file if styling isn't inlined into `index.html`. A viewer MUST NOT add any other supporting files or subfolders. See specification §3.
+- Keep its own file footprint minimal: `index.html`, exactly one JavaScript file (with any library dependency, such as `@leoninestudios/daice-chain-core`, inlined into it — no separate vendor script or library folder), and at most one CSS file if styling isn't inlined into `index.html`. A viewer MUST NOT add any other supporting files or subfolders. See specification §3.
 
 ## 5. Extension / capture tool requirements
 
@@ -58,7 +58,7 @@ A tool that captures generation metadata from a third-party platform (like the M
 
 ## 6. What conformance does not require
 
-- Conformance does not require using this repository's editor, viewer, or `@daice-chain/core` library. Any implementation that satisfies the rules above, in any language or stack, is conformant.
+- Conformance does not require using this repository's editor, viewer, or `@leoninestudios/daice-chain-core` library. Any implementation that satisfies the rules above, in any language or stack, is conformant.
 - Conformance does not require a particular UI, only the listed capabilities.
 - Conformance does not require re-exporting a package. See §3.
 - Conformance does not require a package to include an `index.html` viewer at all. A package consisting of only `daice.json` and `assets/` is fully conformant. See §4.

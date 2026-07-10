@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Archive, FileJson, FileSpreadsheet, FileText, Redo2, Undo2, X } from "lucide-react";
-import { validatePackage, type DaicePackage } from "@daice-chain/core";
+import { validatePackage, type DaicePackage } from "@leoninestudios/daice-chain-core";
 import { useEditorDispatch, useEditorHistory } from "@/state/EditorProvider";
 import type { PendingFile } from "@/state/editorState";
 import { exportZip, exportDaiceJson } from "@/io/exportZip";

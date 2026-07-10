@@ -108,7 +108,7 @@ interface ExtensionPushBody {
 }
 ```
 
-`DaiceAsset` (from [`@daice-chain/core`](../packages/core/src/types.ts) /
+`DaiceAsset` (from [`@leoninestudios/daice-chain-core`](../packages/core/src/types.ts) /
 [`spec/README.md`](../spec/README.md)):
 
 ```ts
@@ -132,7 +132,7 @@ interface DaiceAsset {
 
 `references` may be omitted; the bridge treats a missing array as `[]`
 rather than rejecting the push. Every other field is validated against
-`@daice-chain/core`'s `assetSchema` — an invalid asset gets a **422** with
+`@leoninestudios/daice-chain-core`'s `assetSchema` — an invalid asset gets a **422** with
 path-scoped errors, e.g.:
 
 ```json

@@ -1,4 +1,4 @@
-import type { DaicePackage, Contact } from "@daice-chain/core";
+import type { DaicePackage, Contact } from "@leoninestudios/daice-chain-core";
 
 /**
  * A localStorage-backed list of previously used `{ name, email? }` pairs, so

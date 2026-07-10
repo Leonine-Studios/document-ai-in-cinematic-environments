@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Contact } from "@daice-chain/core";
+import type { Contact } from "@leoninestudios/daice-chain-core";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

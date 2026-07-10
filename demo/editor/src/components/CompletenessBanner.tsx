@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Info, X } from "lucide-react";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import { assetsWithCompletenessGaps } from "@/lib/completenessHints";
 import { Button } from "@/components/ui/button";
 

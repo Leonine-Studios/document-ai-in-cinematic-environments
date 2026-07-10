@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import type { DaiceAsset } from "@daice-chain/core";
+import type { DaiceAsset } from "@leoninestudios/daice-chain-core";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 

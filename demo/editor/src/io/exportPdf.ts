@@ -1,6 +1,6 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import { buildOverviewRows, OVERVIEW_COLUMNS } from "./exportOverview";
 
 /** Exports a metadata-only overview of the package as a `.pdf` (jsPDF + autotable), with no embedded media. */

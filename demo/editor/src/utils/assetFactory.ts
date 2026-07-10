@@ -1,4 +1,4 @@
-import type { DaiceAsset } from "@daice-chain/core";
+import type { DaiceAsset } from "@leoninestudios/daice-chain-core";
 import { deriveAssetId } from "./deriveAssetId";
 import { guessMimeTypeFromFilename } from "@/lib/mimeTypes";
 import { extractComfyMetadata } from "@/io/comfy/extractComfyMetadata";

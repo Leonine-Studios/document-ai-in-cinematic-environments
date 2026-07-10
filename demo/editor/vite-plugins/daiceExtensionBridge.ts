@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Plugin } from "vite";
-import { assetSchema, type DaiceAsset } from "@daice-chain/core";
+import { assetSchema, type DaiceAsset } from "@leoninestudios/daice-chain-core";
 import type {
   BridgeInboxJob,
   BridgePushMediaRef,

@@ -14,8 +14,8 @@
  * parent, exactly as it would in a lineage tree.
  *
  * Validation, lineage resolution, and table flattening are plain JS below
- * (no Zod, no @daice-chain/core dependency) so this stays a single small file
- * with no build step to copy/paste. @daice-chain/core (packages/core/src/) is
+ * (no Zod, no @leoninestudios/daice-chain-core dependency) so this stays a single small file
+ * with no build step to copy/paste. @leoninestudios/daice-chain-core (packages/core/src/) is
  * still the canonical, tested implementation used by the editor and
  * this repo's own tests — keep this section in sync with schema.ts and
  * validate.ts by hand whenever the spec changes.

@@ -1,5 +1,5 @@
 import { AlertTriangle } from "lucide-react";
-import type { ValidationError } from "@daice-chain/core";
+import type { ValidationError } from "@leoninestudios/daice-chain-core";
 import { Button } from "@/components/ui/button";
 
 export function ErrorPanel({

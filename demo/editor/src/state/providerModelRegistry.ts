@@ -1,4 +1,4 @@
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 
 /**
  * localStorage-backed lists of previously used AI `provider` and `model`

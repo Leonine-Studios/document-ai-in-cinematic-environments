@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 import { Columns3, Plus, ChevronsDownUp, ChevronsUpDown, UploadCloud, X } from "lucide-react";
-import { resolveLineage, type LineageNode, type DaiceAsset, type DaicePackage } from "@daice-chain/core";
+import { resolveLineage, type LineageNode, type DaiceAsset, type DaicePackage } from "@leoninestudios/daice-chain-core";
 import { useEditorDispatch, useEditorState } from "@/state/EditorProvider";
 import type { PendingFile } from "@/state/editorState";
 import { collectPackageContacts, loadContactRegistry, rememberContact } from "@/state/contactRegistry";
@@ -136,7 +136,7 @@ export function AssetTable({ pkg, pendingFiles }: { pkg: DaicePackage; pendingFi
   const lineageByRoot = useMemo(() => {
     const rootIds = computeRootIds(pkg);
     // Build every root's fully-resolved lineage once per render, shared by
-    // reference (see @daice-chain/core's resolveLineage) rather than recomputed per row.
+    // reference (see @leoninestudios/daice-chain-core's resolveLineage) rather than recomputed per row.
     return rootIds.map((rootId) => ({ rootId, node: resolveLineage(rootId, pkg) }));
   }, [pkg]);
 

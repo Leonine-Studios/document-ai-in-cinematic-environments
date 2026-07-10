@@ -1,5 +1,5 @@
 import type { Dispatch } from "react";
-import type { DaiceAsset, DaicePackage } from "@daice-chain/core";
+import type { DaiceAsset, DaicePackage } from "@leoninestudios/daice-chain-core";
 import type { EditorAction } from "@/state/editorState";
 import { deriveDuplicateAssetId } from "@/utils/deriveAssetId";
 import { mediaUrlFor, type BridgeInboxJob } from "./extensionBridgeTypes";

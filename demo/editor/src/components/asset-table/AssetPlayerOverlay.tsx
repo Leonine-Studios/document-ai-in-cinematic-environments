@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { ChevronLeft, ChevronRight, FileQuestion } from "lucide-react";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import type { PendingFile } from "@/state/editorState";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";

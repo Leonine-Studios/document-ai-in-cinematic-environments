@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { validatePackage, type DaicePackage, type ValidationError } from "@daice-chain/core";
+import { validatePackage, type DaicePackage, type ValidationError } from "@leoninestudios/daice-chain-core";
 import type { PendingFile } from "../state/editorState";
 
 export type ImportResult =
@@ -69,7 +69,7 @@ async function readBareJson(
 
 /**
  * Imports a package from either a `.zip` bundle or a bare `daice.json` file,
- * validating it via `@daice-chain/core`'s `validatePackage` before ever touching
+ * validating it via `@leoninestudios/daice-chain-core`'s `validatePackage` before ever touching
  * editor state — a failed validation never partially loads. See
  * docs/planning/04-editor.md, deliverable 5.
  */

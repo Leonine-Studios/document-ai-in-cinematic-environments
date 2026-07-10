@@ -1,6 +1,6 @@
 import { useMemo, useState, type DragEvent } from "react";
 import { Sparkles } from "lucide-react";
-import type { DaiceAsset, DaicePackage } from "@daice-chain/core";
+import type { DaiceAsset, DaicePackage } from "@leoninestudios/daice-chain-core";
 import { useEditorDispatch } from "@/state/EditorProvider";
 import type { PendingFile } from "@/state/editorState";
 import { collectPackageContacts, loadContactRegistry, rememberContact } from "@/state/contactRegistry";
@@ -97,7 +97,7 @@ function toAsset(draft: AssetDraft, references: DaiceAsset["references"]): Daice
 
 /**
  * Asset detail dialog: media preview + every editable field, with per-field
- * validation reusing `@daice-chain/core`'s `assetSchema` so nothing invalid can be
+ * validation reusing `@leoninestudios/daice-chain-core`'s `assetSchema` so nothing invalid can be
  * saved. Replaces the old `AssetForm`. See docs/planning/04-editor.md Part C.
  */
 export function AssetDetailDialog({

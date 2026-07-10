@@ -1,9 +1,9 @@
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 
 /**
  * Lightweight, editor-local check used only to give immediate UI feedback
  * before a drag-and-drop nesting action commits (e.g. disabling an invalid
- * drop target). `@daice-chain/core`'s `validatePackage` remains the authoritative
+ * drop target). `@leoninestudios/daice-chain-core`'s `validatePackage` remains the authoritative
  * cycle check run on import/export — this is a UX convenience, not a
  * replacement for it.
  */

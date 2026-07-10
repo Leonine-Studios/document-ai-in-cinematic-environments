@@ -1,4 +1,4 @@
-import { validatePackage, type DaicePackage } from "@daice-chain/core";
+import { validatePackage, type DaicePackage } from "@leoninestudios/daice-chain-core";
 import type { PendingFile } from "../state/editorState";
 
 // The Phase 1 demo package is the canonical example shipped at
@@ -33,7 +33,7 @@ export async function loadDemoPackage(): Promise<{ pkg: DaicePackage; pendingFil
   const result = validatePackage(demoPackageJson);
   if (!result.valid) {
     // The shipped demo package is expected to always be valid; a failure
-    // here means the fixture and @daice-chain/core have drifted apart.
+    // here means the fixture and @leoninestudios/daice-chain-core have drifted apart.
     throw new Error(`Bundled demo package failed validation: ${result.errors.map((e) => e.path).join(", ")}`);
   }
 

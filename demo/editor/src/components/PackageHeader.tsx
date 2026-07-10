@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import { useEditorDispatch } from "@/state/EditorProvider";
 import { loadContactRegistry, rememberContact } from "@/state/contactRegistry";
 import { validatePackageMetaDraft } from "@/lib/fieldValidation";

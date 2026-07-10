@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AlertTriangle, X } from "lucide-react";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import type { PendingFile } from "@/state/editorState";
 import { assetsMissingMedia } from "@/lib/mediaWarnings";
 import { Button } from "@/components/ui/button";

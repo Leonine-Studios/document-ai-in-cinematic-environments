@@ -1,4 +1,4 @@
-import type { DaiceAsset, DaicePackage } from "@daice-chain/core";
+import type { DaiceAsset, DaicePackage } from "@leoninestudios/daice-chain-core";
 
 /**
  * Advisory (never blocking) gaps in the SHOULD/MAY-level fields the

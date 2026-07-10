@@ -1,4 +1,4 @@
-import type { DaiceAsset, DaicePackage, PackageMetadata, ValidationError } from "@daice-chain/core";
+import type { DaiceAsset, DaicePackage, PackageMetadata, ValidationError } from "@leoninestudios/daice-chain-core";
 
 /**
  * A media file the user has attached to an asset but that has not been

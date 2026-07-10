@@ -1,5 +1,5 @@
 import * as XLSX from "xlsx";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import { buildOverviewRows, OVERVIEW_COLUMNS } from "./exportOverview";
 
 /** Exports a metadata-only overview of the package as a real `.xlsx` workbook (SheetJS), with no embedded media. */

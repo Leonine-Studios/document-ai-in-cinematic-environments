@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import type { PendingFile } from "../state/editorState";
 import { downloadBlob } from "../utils/download";
 

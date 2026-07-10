@@ -1,4 +1,4 @@
-import type { DaiceAsset } from "@daice-chain/core";
+import type { DaiceAsset } from "@leoninestudios/daice-chain-core";
 
 /**
  * Shared request/response shapes for the dev-only extension bridge (see

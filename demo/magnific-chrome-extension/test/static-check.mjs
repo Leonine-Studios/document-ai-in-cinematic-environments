@@ -2,13 +2,13 @@
  * Static verification of magnific.js's mapping logic — no browser, no
  * network. Runs real (recorded) Magnific API response shapes through
  * creationToDraft/wireReferences/finalizeFragment and validates the result
- * against @daice-chain/core's own `assetSchema` (the same Zod schema the editor
+ * against @leoninestudios/daice-chain-core's own `assetSchema` (the same Zod schema the editor
  * uses), per the plan's "Acceptance for this draft".
  *
  * Run from the repo root: node demo/magnific-chrome-extension/test/static-check.mjs
  */
 
-import { assetSchema } from "@daice-chain/core";
+import { assetSchema } from "@leoninestudios/daice-chain-core";
 import {
   creationToDraft,
   dedupeDraftsByIdentifier,
@@ -141,7 +141,7 @@ for (const fragment of fragments) {
 }
 console.log();
 
-console.log("Schema validation (@daice-chain/core assetSchema, additionalProperties: false):");
+console.log("Schema validation (@leoninestudios/daice-chain-core assetSchema, additionalProperties: false):");
 for (const fragment of fragments) {
   const result = assetSchema.safeParse(fragment);
   check(`"${fragment.id}" validates as a DaiceAsset`, result.success);

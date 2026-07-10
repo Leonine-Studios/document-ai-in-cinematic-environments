@@ -1,8 +1,12 @@
 {
-  "name": "@daice-chain/core",
+  "name": "@leoninestudios/daice-chain-core",
   "version": "0.1.0",
   "description": "Canonical TypeScript types, validation, lineage resolution, and table flattening for DAICE-Chain packages.",
   "type": "module",
+  "homepage": "https://github.com/Leonine-Studios/document-ai-in-cinematic-environments/tree/main/packages/core",
+  "bugs": {
+    "url": "https://github.com/Leonine-Studios/document-ai-in-cinematic-environments/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Leonine-Studios/document-ai-in-cinematic-environments.git",

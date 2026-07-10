@@ -15,10 +15,10 @@ It exists because AI-assisted media production is now common in film, video, and
 | Path | What it is |
 |------|------------|
 | [`spec/`](spec/) | The specification only: human-readable spec, JSON Schema, conformance rules, and glossary. The normative artifact at v0.1.0 — no example packages or tooling live here |
-| [`packages/core/`](packages/core/) | `@daice-chain/core` — TypeScript types, Zod validators, lineage resolution, and table flattening shared by every tool in this repo |
+| [`packages/core/`](packages/core/) | `@leoninestudios/daice-chain-core` — TypeScript types, Zod validators, lineage resolution, and table flattening shared by every tool in this repo |
 | [`demo/`](demo/) | Everything that shows the specification in action — illustrative, and free to change independently of `spec/` (see `demo/`'s own layout below) |
-| [`demo/viewer/`](demo/viewer/) | The static, read-only HTML viewer that a package MAY optionally include (see "Viewer" vs. "Editor" in [`spec/glossary.md`](spec/glossary.md)). Self-contained plain JS with no build step and no `@daice-chain/core` dependency, versioned independently (`VIEWER_VERSION` in `viewer.js`, shown in its own UI), and designed to be copy/pasted as-is into your own export pipeline |
-| [`demo/examples/`](demo/examples/) | A reference example package (`demo-package/`, viewer included) and deliberately-invalid fixtures (`invalid/`) used by `@daice-chain/core`'s own test suite |
+| [`demo/viewer/`](demo/viewer/) | The static, read-only HTML viewer that a package MAY optionally include (see "Viewer" vs. "Editor" in [`spec/glossary.md`](spec/glossary.md)). Self-contained plain JS with no build step and no `@leoninestudios/daice-chain-core` dependency, versioned independently (`VIEWER_VERSION` in `viewer.js`, shown in its own UI), and designed to be copy/pasted as-is into your own export pipeline |
+| [`demo/examples/`](demo/examples/) | A reference example package (`demo-package/`, viewer included) and deliberately-invalid fixtures (`invalid/`) used by `@leoninestudios/daice-chain-core`'s own test suite |
 | [`demo/editor/`](demo/editor/) | A proof-of-concept editor (Vite + React) for authoring, importing, and exporting DAICE-Chain packages. Not intended for production use — it exists to prove the specification is implementable and to generate demo packages |
 | [`demo/magnific-chrome-extension/`](demo/magnific-chrome-extension/) | A Chrome extension example that captures generation metadata from the Magnific web app and hands it to the editor, showing how a real platform can feed DAICE-Chain |
 

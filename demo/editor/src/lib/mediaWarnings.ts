@@ -1,11 +1,11 @@
-import type { DaiceAsset, DaicePackage, DaiceReference } from "@daice-chain/core";
+import type { DaiceAsset, DaicePackage, DaiceReference } from "@leoninestudios/daice-chain-core";
 import type { PendingFile } from "@/state/editorState";
 
 /**
  * References on `asset` that point at another asset in this package with no
  * media blob attached in the current session. Dangling references (pointing
  * at no asset at all) are excluded — those already surface as red schema
- * errors via `@daice-chain/core`'s `validatePackage`/`assetSchema`. This check is
+ * errors via `@leoninestudios/daice-chain-core`'s `validatePackage`/`assetSchema`. This check is
  * purely advisory and orange, never red: a valid DAICE-Chain package may legitimately
  * omit media a writer doesn't have yet (see spec/README.md §3), so it never
  * blocks export — it only nudges toward retrieving the rest of the

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { FilePlus2, FolderOpen, Sparkles } from "lucide-react";
-import type { DaicePackage } from "@daice-chain/core";
+import type { DaicePackage } from "@leoninestudios/daice-chain-core";
 import { useEditorDispatch, useEditorState } from "@/state/EditorProvider";
 import { importPackage } from "@/io/importPackage";
 import { loadDemoPackage } from "@/io/demoPackage";

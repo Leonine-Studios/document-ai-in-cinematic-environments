@@ -1,4 +1,4 @@
-import { flattenForTable, type DaicePackage } from "@daice-chain/core";
+import { flattenForTable, type DaicePackage } from "@leoninestudios/daice-chain-core";
 
 /**
  * One row of the metadata-only package overview shared by the Excel and PDF
@@ -38,7 +38,7 @@ export const OVERVIEW_COLUMNS: { key: keyof OverviewRow; label: string }[] = [
   { key: "mediaMimeType", label: "Mime type" },
 ];
 
-/** Builds one overview row per asset, in the same order as `pkg.assets`, reusing `@daice-chain/core`'s `flattenForTable` for the derived fields it already computes. */
+/** Builds one overview row per asset, in the same order as `pkg.assets`, reusing `@leoninestudios/daice-chain-core`'s `flattenForTable` for the derived fields it already computes. */
 export function buildOverviewRows(pkg: DaicePackage): OverviewRow[] {
   const flatRows = flattenForTable(pkg);
   return pkg.assets.map((asset, index) => {

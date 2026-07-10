@@ -1,6 +1,6 @@
 import { useMemo, useState, type DragEvent, type ReactNode } from "react";
 import { AlertTriangle, ChevronDown, ChevronRight, Clipboard, ClipboardPaste, Copy, GripVertical, Info, Maximize2, Scissors, Trash2 } from "lucide-react";
-import type { LineageNode, DaiceAsset, DaicePackage, Contact } from "@daice-chain/core";
+import type { LineageNode, DaiceAsset, DaicePackage, Contact } from "@leoninestudios/daice-chain-core";
 import { useEditorDispatch } from "@/state/EditorProvider";
 import type { PendingFile } from "@/state/editorState";
 import { validateAssetDraft } from "@/lib/fieldValidation";

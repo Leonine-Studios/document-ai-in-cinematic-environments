@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "DAICE-Chain Capture for Magnific",
+  "version": "0.1.0",
+  "description": "Capture Magnific generations (prompt, model, seed, creator, references) as DAICE-Chain asset fragments, ready to hand off to a DAICE-Chain editor.",
+  "permissions": ["contextMenus", "sidePanel", "storage", "activeTab"],
+  "host_permissions": [
+    "https://www.magnific.com/*",
+    "https://pikaso.cdnpk.net/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.magnific.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "action": {
+    "default_title": "DAICE-Chain Capture"
+  }
+}

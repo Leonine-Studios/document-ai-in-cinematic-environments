@@ -1,0 +1,752 @@
+/* DAICE-Chain Viewer — hand-written, self-contained stylesheet. No frameworks, no
+   remote fonts/icons. See docs/planning/03-viewer.md for the design brief. */
+
+:root {
+  color-scheme: light dark;
+
+  /* Neutral (zinc-style) grayscale palette, shadcn-inspired: plain black
+     and white first, with exactly one accent hue reserved for the single
+     most meaningful signal (AI-generated) and the focus ring — not
+     sprinkled across buttons, hovers, or menus. --color-danger is the one
+     other semantic color (errors), matching shadcn's --destructive. */
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f4f4f5;
+  --color-border: #e4e4e7;
+  --color-border-strong: #d4d4d8;
+  --color-text: #09090b;
+  --color-text-muted: #71717a;
+  --color-accent: #6d28d9;
+  --color-accent-soft: #f3eefc;
+  --color-danger: #dc2626;
+  --color-danger-soft: #fef2f2;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #09090b;
+    --color-surface: #18181b;
+    --color-surface-raised: #27272a;
+    --color-border: #27272a;
+    --color-border-strong: #3f3f46;
+    --color-text: #fafafa;
+    --color-text-muted: #a1a1aa;
+    --color-accent: #a78bfa;
+    --color-accent-soft: #2e1f4d;
+    --color-danger: #f87171;
+    --color-danger-soft: #3f1616;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100%;
+}
+
+.screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+#viewer-screen {
+  display: block;
+  align-items: initial;
+  justify-content: initial;
+  min-height: 0;
+  padding: 0;
+}
+
+#viewer-screen[hidden] {
+  display: none;
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-2);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.eyebrow--error {
+  color: var(--color-danger);
+}
+
+.version-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: var(--color-text-muted);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  padding: 1px 7px;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+.pkg-viewer-version {
+  margin: var(--space-2) 0 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Picker screen */
+
+.picker-card {
+  max-width: 480px;
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.picker-card h1 {
+  margin: 0 0 var(--space-3);
+  font-size: 22px;
+}
+
+.picker-lede {
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-5);
+}
+
+.picker-hint {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  margin: var(--space-2) 0 var(--space-4);
+}
+
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.05s ease;
+}
+
+.file-button:hover {
+  filter: brightness(1.08);
+}
+
+.file-button:active {
+  transform: translateY(1px);
+}
+
+.file-button--secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+}
+
+.file-button code {
+  font-family: var(--font-mono);
+  margin-left: var(--space-1);
+}
+
+/* Error screen */
+
+.error-panel {
+  max-width: 560px;
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+}
+
+.error-panel h1 {
+  margin: 0 0 var(--space-3);
+  font-size: 20px;
+}
+
+.error-lede {
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-4);
+}
+
+.error-list {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.error-list li {
+  background: var(--color-danger-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-size: 13px;
+}
+
+.error-list code {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-right: var(--space-1);
+}
+
+.btn {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+/* Package header */
+
+.pkg-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  justify-content: space-between;
+  align-items: flex-end;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-5) var(--space-6);
+}
+
+.pkg-header__main h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.pkg-id {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.pkg-description {
+  margin: var(--space-2) 0 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+.pkg-header__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, auto));
+  gap: var(--space-4) var(--space-6);
+  margin: 0;
+}
+
+.pkg-header__meta dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.pkg-header__meta dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+main {
+  padding: var(--space-6);
+}
+
+/* Table toolbar */
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.table-toolbar__hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.table-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.columns-menu {
+  position: relative;
+}
+
+.columns-menu summary {
+  list-style: none;
+}
+
+.columns-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.columns-menu summary::after {
+  content: " \25be";
+}
+
+.columns-menu[open] summary {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.columns-menu__panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--space-2));
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 180px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-3);
+}
+
+.columns-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.columns-menu__item input {
+  accent-color: var(--color-text);
+}
+
+/* Table view */
+
+.table-scroll {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-raised);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--color-surface-raised) 60%, var(--color-bg));
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr.row-ai td:first-child {
+  border-left: 3px solid var(--color-accent);
+}
+
+tbody tr.row-nonai td:first-child {
+  border-left: 3px solid var(--color-border-strong);
+}
+
+.asset-id {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prompt-cell {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.prompt-cell:hover {
+  white-space: normal;
+  overflow: visible;
+}
+
+/* Neutral, bordered badges — distinguished by a small leading dot rather
+   than a colored fill, keeping the palette plain black-and-white. The one
+   exception is --badge--ai's dot, which uses the single reserved accent. */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--color-border-strong);
+}
+
+.badge--ai::before {
+  background: var(--color-accent);
+}
+
+td[data-col="tcIn"],
+td[data-col="tcOut"] {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Hierarchical (tree) rows — nested references, collapsed by default.
+   The asset cell's flex row lives on `.asset-cell-inner`, not the `<td>`
+   itself: a `<td>` with `display: flex` stops participating in the
+   table's row-height matching in most browsers, so it'd render shorter
+   than its siblings and throw off the row's border/alignment. The inner
+   wrapper can safely use `height: 100%` instead, since percentage
+   heights do resolve against a table cell's rendered height.
+   `.asset-cell-inner` has two parts: `.tree-guides` (connector lines
+   bubbling up from each nested reference to its parent, occupying the
+   cell's full height) and `.tree-cell` (the toggle + id, vertically
+   centered with the column's normal padding). Splitting them lets the
+   guide lines run edge-to-edge while the visible padding stays put. */
+
+td.asset-cell {
+  padding: 0;
+}
+
+.asset-cell-inner {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+.tree-guides {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  padding-left: var(--space-4);
+}
+
+.tree-guide {
+  position: relative;
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.tree-guide--line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 1px;
+  background: var(--color-border-strong);
+}
+
+.tree-guide--elbow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 1px;
+  background: var(--color-border-strong);
+}
+
+.tree-guide--elbow-last::before {
+  bottom: 50%;
+}
+
+.tree-guide--elbow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 7px;
+  width: 9px;
+  height: 1px;
+  background: var(--color-border-strong);
+}
+
+.tree-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  white-space: nowrap;
+}
+
+.tree-toggle {
+  appearance: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tree-toggle:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.tree-toggle--spacer {
+  visibility: hidden;
+  cursor: default;
+  border: none;
+}
+
+/* Thumbnails */
+
+.thumb {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--color-text-muted);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb--empty::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px dashed var(--color-border-strong);
+}
+
+.thumb--path::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  border: 2px solid var(--color-border-strong);
+}
+
+/* Set once the media-integrity check (see viewer.js) confirms a
+   mediaPath doesn't resolve to an actual file — non-blocking, so the
+   row still renders in full; see the warnings banner below. */
+.thumb--missing {
+  border-style: dashed;
+  border-color: var(--color-text-muted);
+}
+
+.thumb--missing::after {
+  content: "?";
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+/* Package warnings banner — non-blocking media-integrity notices, shown
+   above the table when the current load mode can verify file presence
+   (directory picker or HTTP) and at least one mediaPath doesn't resolve. */
+
+.package-warnings {
+  margin-bottom: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.package-warnings__title {
+  margin: 0 0 var(--space-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.package-warnings__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+}
+
+.package-warnings__list code {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-right: var(--space-1);
+}
+
+/* Column visibility — toggled via the "Columns" menu (JS adds/removes the
+   matching hide-col-* class on the table element). */
+
+table.hide-col-thumb [data-col="thumb"],
+table.hide-col-provider [data-col="provider"],
+table.hide-col-model [data-col="model"],
+table.hide-col-seed [data-col="seed"],
+table.hide-col-prompt [data-col="prompt"],
+table.hide-col-generatedBy [data-col="generatedBy"],
+table.hide-col-generatedAt [data-col="generatedAt"],
+table.hide-col-references [data-col="references"],
+table.hide-col-tcIn [data-col="tcIn"],
+table.hide-col-tcOut [data-col="tcOut"],
+table.hide-col-mimeType [data-col="mimeType"] {
+  display: none;
+}
+
+/* Responsive */
+
+@media (max-width: 720px) {
+  .pkg-header {
+    padding: var(--space-4);
+  }
+
+  .pkg-header__meta {
+    grid-template-columns: repeat(2, minmax(100px, auto));
+  }
+
+  main {
+    padding: var(--space-4);
+  }
+
+  .table-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

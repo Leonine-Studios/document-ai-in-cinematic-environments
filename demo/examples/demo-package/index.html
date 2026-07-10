@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!--
+    Generic DAICE-Chain Viewer — reference implementation, v1.0.0 (see the
+    js-viewer-version tags below, kept in sync with VIEWER_VERSION in
+    viewer.js). Freestanding and self-contained by design: copy this file
+    plus viewer.css and viewer.js as-is into your own package export
+    pipeline and drop in your own daice.json/assets/. See spec/README.md §3
+    and docs/planning/03-viewer.md for the contract it keeps.
+  -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DAICE-Chain Viewer</title>
+  <link rel="stylesheet" href="viewer.css" />
+</head>
+<body>
+  <div id="app">
+
+    <section id="picker-screen" class="screen">
+      <div class="picker-card">
+        <p class="eyebrow">
+          Generic DAICE-Chain Viewer <span class="version-tag js-viewer-version"></span>
+        </p>
+        <h1>Load this package</h1>
+        <p class="picker-lede">
+          This viewer only displays the DAICE-Chain package it ships inside — it's not a general tool for
+          opening other packages. Your browser blocks a local page from reading files on its own, so
+          confirm this package's own files below to continue. Nothing is uploaded anywhere — it works
+          fully offline, with no server and no network access.
+        </p>
+
+        <label class="file-button">
+          <input id="picker-input-dir" type="file" webkitdirectory directory multiple hidden />
+          Select this package's folder
+        </label>
+        <p class="picker-hint">Recommended — lets the viewer show media thumbnails alongside the documentation.</p>
+
+        <label class="file-button file-button--secondary">
+          <input id="picker-input-file" type="file" accept="application/json,.json" hidden />
+          Or just its <code>daice.json</code>
+        </label>
+        <p class="picker-hint">Faster, but media previews won't be available.</p>
+      </div>
+    </section>
+
+    <section id="error-screen" class="screen" hidden>
+      <div class="error-panel">
+        <p class="eyebrow eyebrow--error">Could not load package</p>
+        <h1>This file isn't a valid DAICE-Chain package</h1>
+        <p class="error-lede">The following issues were found:</p>
+        <ul id="error-list" class="error-list"></ul>
+        <button id="error-retry" class="btn" type="button">Try again</button>
+      </div>
+    </section>
+
+    <section id="viewer-screen" class="screen" hidden>
+      <header class="pkg-header">
+        <div class="pkg-header__main">
+          <p class="eyebrow">DAICE-Chain package</p>
+          <h1 id="pkg-title"></h1>
+          <p class="pkg-id" id="pkg-id"></p>
+          <p class="pkg-description" id="pkg-description" hidden></p>
+          <p class="pkg-viewer-version">
+            Viewed with the generic DAICE-Chain Viewer <span class="version-tag js-viewer-version"></span>
+          </p>
+        </div>
+        <dl class="pkg-header__meta">
+          <div>
+            <dt>Created by</dt>
+            <dd id="pkg-createdby"></dd>
+          </div>
+          <div>
+            <dt>Packaged</dt>
+            <dd id="pkg-createdat"></dd>
+          </div>
+          <div>
+            <dt>Assets</dt>
+            <dd id="pkg-assetcount"></dd>
+          </div>
+        </dl>
+      </header>
+
+      <main>
+        <section id="table-view">
+          <div class="table-toolbar">
+            <p class="table-toolbar__hint">
+              Rows are each asset with no incoming references (final outputs); expand a row to unfold
+              what it was made from.
+            </p>
+            <div class="table-toolbar__actions">
+              <button id="expand-collapse-all-btn" class="btn btn--ghost" type="button">Expand all</button>
+              <details class="columns-menu">
+                <summary class="btn btn--ghost">Columns</summary>
+                <div class="columns-menu__panel" id="columns-menu-panel"></div>
+              </details>
+            </div>
+          </div>
+          <div id="package-warnings" class="package-warnings" hidden>
+            <p class="package-warnings__title">Some referenced media files could not be found:</p>
+            <ul id="package-warnings-list" class="package-warnings__list"></ul>
+          </div>
+          <div class="table-scroll">
+            <table id="assets-table">
+              <thead>
+                <tr id="table-head-row"></tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </section>
+
+  </div>
+
+  <script id="daice-chain-data" type="application/json" hidden>
+{
+  "daiceVersion": "1.0",
+  "package": {
+    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    "packageName": "vendorxyz_contract123",
+    "description": "Hero shot and insert shot deliveries for the ExampleShow pilot, flight 1.",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": { "name": "Vendor XYZ", "email": "delivery@vendorxyz.example" },
+    "metadata": {
+      "flight": "1",
+      "note": "Fictional example package used to illustrate a multi-asset delivery with a shared input and more than one lineage. Not a real production asset."
+    }
+  },
+  "assets": [
+    {
+      "id": "asset-hero-final",
+      "aiGenerated": true,
+      "provider": "Magnific",
+      "model": "ExampleCompositor v2",
+      "prompt": "final color grade, cinematic golden hour tone, hero centered",
+      "generatedBy": { "name": "Ada Example", "email": "ada@vendorxyz.example" },
+      "generatedAt": "2026-07-01T14:00:00Z",
+      "seed": 482913,
+      "mediaPath": "assets/hero-final.png",
+      "mediaMimeType": "image/png",
+      "references": [
+        { "assetId": "asset-hero-composite", "label": "base composite" },
+        { "assetId": "asset-style-ref", "label": "style reference board" }
+      ],
+      "timecodeIn": "01:02:03:12",
+      "timecodeOut": "01:02:07:04"
+    },
+    {
+      "id": "asset-hero-composite",
+      "aiGenerated": true,
+      "provider": "Magnific",
+      "model": "ExampleCompositor v2",
+      "prompt": "composite upscaled hero plate over generated background, soft shadow",
+      "generatedBy": { "name": "Ada Example", "email": "ada@vendorxyz.example" },
+      "generatedAt": "2026-07-01T13:15:00Z",
+      "mediaPath": "assets/hero-composite.png",
+      "mediaMimeType": "image/png",
+      "references": [
+        { "assetId": "asset-hero-upscaled" },
+        { "assetId": "asset-bg-generated" },
+        { "assetId": "asset-style-ref", "label": "style reference board" }
+      ]
+    },
+    {
+      "id": "asset-hero-upscaled",
+      "aiGenerated": true,
+      "provider": "Local (ComfyUI)",
+      "model": "ExampleUpscaler v1",
+      "prompt": "upscale to 4K, preserve fine detail, denoise",
+      "generatedBy": { "name": "Jordan Example", "email": "jordan@vendorxyz.example" },
+      "generatedAt": "2026-07-01T11:40:00Z",
+      "seed": 77021,
+      "mediaPath": "assets/hero-upscaled.png",
+      "mediaMimeType": "image/png",
+      "references": [
+        { "assetId": "asset-raw-plate" }
+      ]
+    },
+    {
+      "id": "asset-bg-generated",
+      "aiGenerated": true,
+      "provider": "Higgsfield",
+      "model": "ExampleImageGen Standard",
+      "prompt": "soft studio backdrop, warm gradient, no subjects",
+      "generatedBy": { "name": "Jordan Example", "email": "jordan@vendorxyz.example" },
+      "generatedAt": "2026-07-01T10:05:00Z",
+      "mediaPath": "assets/bg-generated.png",
+      "mediaMimeType": "image/png",
+      "references": []
+    },
+    {
+      "id": "asset-raw-plate",
+      "aiGenerated": false,
+      "mediaPath": "assets/raw-plate.png",
+      "mediaMimeType": "image/png",
+      "references": [],
+      "metadata": {
+        "captureDevice": "Example Cinema Camera",
+        "note": "Unmodified camera plate, documented as non-AI to terminate the lineage chain."
+      }
+    },
+    {
+      "id": "asset-style-ref",
+      "aiGenerated": false,
+      "mediaPath": "assets/style-board.png",
+      "mediaMimeType": "image/png",
+      "references": [],
+      "metadata": {
+        "note": "Client-supplied style reference board, used as a non-AI input to more than one asset in this package."
+      }
+    },
+    {
+      "id": "asset-insert-final",
+      "aiGenerated": true,
+      "provider": "Magnific",
+      "model": "ExampleImageGen Standard",
+      "prompt": "insert shot, close-up product detail, studio lighting",
+      "generatedBy": { "name": "Jordan Example", "email": "jordan@vendorxyz.example" },
+      "generatedAt": "2026-07-01T09:20:00Z",
+      "mediaPath": "assets/insert-final.png",
+      "mediaMimeType": "image/png",
+      "references": [
+        { "assetId": "asset-insert-plate" }
+      ]
+    },
+    {
+      "id": "asset-insert-plate",
+      "aiGenerated": false,
+      "mediaPath": "assets/insert-plate.png",
+      "mediaMimeType": "image/png",
+      "references": [],
+      "metadata": {
+        "note": "Unmodified product plate; the insert shot built from it was ultimately cut from the final show, so neither asset carries show timecodes."
+      }
+    },
+    {
+      "id": "asset-missing-texture",
+      "aiGenerated": false,
+      "mediaPath": "assets/missing-texture.png",
+      "mediaMimeType": "image/png",
+      "references": [],
+      "metadata": {
+        "note": "Deliberately has no corresponding file in assets/, to demonstrate the viewer's non-blocking media-integrity warning (see docs/planning/03-viewer.md). Every other asset's mediaPath in this example resolves normally. This is otherwise a valid DAICE-Chain asset — validatePackage does not check file presence, only writers are held to that (see spec/README.md §3 and spec/conformance.md §2)."
+      }
+    }
+  ]
+}
+  </script>
+  <script src="viewer.js"></script>
+</body>
+</html>

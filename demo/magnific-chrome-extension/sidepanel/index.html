@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DAICE-Chain Capture</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <header>
+      <h1>DAICE-Chain Capture</h1>
+      <p class="subtitle">A basket of Magnific captures, ready to send to a DAICE-Chain editor.</p>
+    </header>
+
+    <section class="actions">
+      <div class="capture-mode">
+        <p class="capture-mode-title">① Individual assets — anywhere</p>
+        <p class="hint">Hover any image or video on magnific.com and click "Capture DAICE-Chain". Always available.</p>
+      </div>
+      <div class="capture-mode">
+        <p class="capture-mode-title">② Whole folder — only inside a project folder</p>
+        <button id="capture-folder-btn" type="button">Capture this project folder</button>
+        <p id="folder-status" class="hint"></p>
+      </div>
+      <p id="capture-toast" class="hint toast" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="basket">
+      <div class="basket-header">
+        <h2>Captured assets (<span id="capture-count">0</span>)</h2>
+        <div class="basket-actions">
+          <button id="clear-all-btn" type="button" disabled>Clear</button>
+        </div>
+      </div>
+      <ul id="capture-list" class="capture-list"></ul>
+      <p id="empty-state" class="hint">Nothing captured yet — see the two ways to capture above.</p>
+    </section>
+
+    <section class="sync">
+      <div class="sync-row">
+        <span id="sync-dot" class="sync-dot sync-dot-down" aria-hidden="true"></span>
+        <button id="sync-btn" type="button" disabled>Send to editor</button>
+      </div>
+      <p id="sync-status" class="hint">
+        Start DAICE-Chain editor (<code>npm run dev</code> in demo/editor) and open a package.
+      </p>
+    </section>
+
+    <template id="capture-card-template">
+      <li class="capture-card">
+        <img class="thumb" alt="" />
+        <div class="details">
+          <p class="prompt"></p>
+          <p class="meta"></p>
+        </div>
+        <div class="card-actions">
+          <button class="remove-btn" type="button">Remove</button>
+        </div>
+      </li>
+    </template>
+
+    <script type="module" src="sidepanel.js"></script>
+  </body>
+</html>

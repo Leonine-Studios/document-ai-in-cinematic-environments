@@ -1,0 +1,44 @@
+{
+  "name": "@daice-chain/core",
+  "version": "0.1.0",
+  "description": "Canonical TypeScript types, validation, lineage resolution, and table flattening for DAICE-Chain packages.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leonine-Studios/document-ai-in-cinematic-environments.git",
+    "directory": "packages/core"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "npm run build:esm && npm run build:iife && npm run build:types",
+    "build:esm": "esbuild src/index.ts --bundle --format=esm --platform=neutral --outfile=dist/index.js",
+    "build:iife": "esbuild src/index.ts --bundle --format=iife --global-name=DaiceCore --outfile=dist/daice-core.iife.js",
+    "build:types": "tsc -p tsconfig.json --emitDeclarationOnly --outDir dist",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "license": "MIT"
+}

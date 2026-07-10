@@ -1,0 +1,58 @@
+{
+  "daiceVersion": "0.1.0",
+  "package": {
+    "id": "valid-prompt-omitted-and-unavailable-media",
+    "packageName": "Valid: omitted prompt and metadata-only referenced asset",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": { "name": "Vendor XYZ", "email": "delivery@vendorxyz.example" }
+  },
+  "assets": [
+    {
+      "id": "asset-final",
+      "aiGenerated": true,
+      "provider": "Magnific",
+      "model": "ExampleModel v2",
+      "prompt": "cinematic wide shot, golden hour, hero walking toward camera",
+      "generatedBy": { "name": "Ada Example", "email": "ada@vendorxyz.example" },
+      "generatedAt": "2026-07-01T11:30:00Z",
+      "mediaPath": "assets/asset-final.jpg",
+      "mediaMimeType": "image/jpeg",
+      "references": [
+        { "assetId": "asset-plate-upscale" },
+        { "assetId": "asset-stock-ref", "label": "Background plate (licensed stock, not redistributable)" }
+      ]
+    },
+    {
+      "id": "asset-plate-upscale",
+      "aiGenerated": true,
+      "provider": "Local (ComfyUI)",
+      "model": "ExampleUpscaler v1",
+      "generatedBy": { "name": "Ada Example", "email": "ada@vendorxyz.example" },
+      "generatedAt": "2026-07-01T10:15:00Z",
+      "mediaPath": "assets/asset-plate-upscale.jpg",
+      "mediaMimeType": "image/jpeg",
+      "references": [
+        { "assetId": "asset-raw-plate" }
+      ],
+      "metadata": {
+        "note": "Intentionally has no prompt field, to demonstrate that omitting a proprietary/trade-secret prompt is valid — provider, model, generatedBy, and generatedAt are still required and present."
+      }
+    },
+    {
+      "id": "asset-raw-plate",
+      "aiGenerated": false,
+      "mediaPath": "assets/asset-raw-plate.jpg",
+      "mediaMimeType": "image/jpeg",
+      "references": []
+    },
+    {
+      "id": "asset-stock-ref",
+      "aiGenerated": false,
+      "references": [],
+      "metadata": {
+        "source": "Licensed stock — example ref 12345, not redistributable",
+        "note": "Intentionally has no mediaPath — the licensed stock file could not be redistributed inside the package, but the reference and asset entry are still fully documented."
+      }
+    }
+  ]
+}

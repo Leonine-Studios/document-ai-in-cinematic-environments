@@ -1,0 +1,16 @@
+{
+  "name": "daice-chain-workspace",
+  "private": true,
+  "description": "DAICE-Chain — Document AI in Cinematic Environments: specification, reference core library, editor, and integration example.",
+  "type": "module",
+  "workspaces": [
+    "packages/core",
+    "demo/editor"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=packages/core && npm run build --workspace=demo/editor",
+    "test": "npm run test --workspace=packages/core",
+    "dev:editor": "npm run dev --workspace=demo/editor"
+  },
+  "license": "MIT"
+}

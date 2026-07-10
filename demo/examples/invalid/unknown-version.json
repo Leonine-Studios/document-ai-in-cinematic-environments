@@ -1,0 +1,10 @@
+{
+  "daiceVersion": "2.0",
+  "package": {
+    "id": "invalid-unknown-version",
+    "packageName": "Invalid: unrecognized daiceVersion",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": { "name": "Ada Example", "email": "ada@example.com" }
+  },
+  "assets": []
+}

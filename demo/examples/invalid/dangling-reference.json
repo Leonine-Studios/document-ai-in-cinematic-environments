@@ -1,0 +1,25 @@
+{
+  "daiceVersion": "0.1.0",
+  "package": {
+    "id": "invalid-dangling-ref",
+    "packageName": "Invalid: dangling asset reference",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": { "name": "Ada Example", "email": "ada@example.com" }
+  },
+  "assets": [
+    {
+      "id": "asset-a",
+      "aiGenerated": true,
+      "provider": "ExampleProvider",
+      "model": "ExampleModel",
+      "prompt": "example prompt",
+      "generatedBy": { "name": "Ada Example", "email": "ada@example.com" },
+      "generatedAt": "2026-07-01T09:05:00Z",
+      "mediaPath": "assets/a.png",
+      "mediaMimeType": "image/png",
+      "references": [
+        { "assetId": "asset-does-not-exist" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!--
+    Generic DAICE-Chain Viewer — reference implementation, v1.0.0 (see the
+    js-viewer-version tags below, kept in sync with VIEWER_VERSION in
+    viewer.js). Freestanding and self-contained by design: copy this file
+    plus viewer.css and viewer.js as-is into your own package export
+    pipeline and drop in your own daice.json/assets/. See spec/README.md §3
+    and docs/planning/03-viewer.md for the contract it keeps.
+  -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DAICE-Chain Viewer</title>
+  <link rel="stylesheet" href="viewer.css" />
+</head>
+<body>
+  <div id="app">
+
+    <section id="picker-screen" class="screen">
+      <div class="picker-card">
+        <p class="eyebrow">
+          Generic DAICE-Chain Viewer <span class="version-tag js-viewer-version"></span>
+        </p>
+        <h1>Load this package</h1>
+        <p class="picker-lede">
+          This viewer only displays the DAICE-Chain package it ships inside — it's not a general tool for
+          opening other packages. Your browser blocks a local page from reading files on its own, so
+          confirm this package's own files below to continue. Nothing is uploaded anywhere — it works
+          fully offline, with no server and no network access.
+        </p>
+
+        <label class="file-button">
+          <input id="picker-input-dir" type="file" webkitdirectory directory multiple hidden />
+          Select this package's folder
+        </label>
+        <p class="picker-hint">Recommended — lets the viewer show media thumbnails alongside the documentation.</p>
+
+        <label class="file-button file-button--secondary">
+          <input id="picker-input-file" type="file" accept="application/json,.json" hidden />
+          Or just its <code>daice.json</code>
+        </label>
+        <p class="picker-hint">Faster, but media previews won't be available.</p>
+      </div>
+    </section>
+
+    <section id="error-screen" class="screen" hidden>
+      <div class="error-panel">
+        <p class="eyebrow eyebrow--error">Could not load package</p>
+        <h1>This file isn't a valid DAICE-Chain package</h1>
+        <p class="error-lede">The following issues were found:</p>
+        <ul id="error-list" class="error-list"></ul>
+        <button id="error-retry" class="btn" type="button">Try again</button>
+      </div>
+    </section>
+
+    <section id="viewer-screen" class="screen" hidden>
+      <header class="pkg-header">
+        <div class="pkg-header__main">
+          <p class="eyebrow">DAICE-Chain package</p>
+          <h1 id="pkg-title"></h1>
+          <p class="pkg-id" id="pkg-id"></p>
+          <p class="pkg-description" id="pkg-description" hidden></p>
+          <p class="pkg-viewer-version">
+            Viewed with the generic DAICE-Chain Viewer <span class="version-tag js-viewer-version"></span>
+          </p>
+        </div>
+        <dl class="pkg-header__meta">
+          <div>
+            <dt>Created by</dt>
+            <dd id="pkg-createdby"></dd>
+          </div>
+          <div>
+            <dt>Packaged</dt>
+            <dd id="pkg-createdat"></dd>
+          </div>
+          <div>
+            <dt>Assets</dt>
+            <dd id="pkg-assetcount"></dd>
+          </div>
+        </dl>
+      </header>
+
+      <main>
+        <section id="table-view">
+          <div class="table-toolbar">
+            <p class="table-toolbar__hint">
+              Rows are each asset with no incoming references (final outputs); expand a row to unfold
+              what it was made from.
+            </p>
+            <div class="table-toolbar__actions">
+              <button id="expand-collapse-all-btn" class="btn btn--ghost" type="button">Expand all</button>
+              <details class="columns-menu">
+                <summary class="btn btn--ghost">Columns</summary>
+                <div class="columns-menu__panel" id="columns-menu-panel"></div>
+              </details>
+            </div>
+          </div>
+          <div id="package-warnings" class="package-warnings" hidden>
+            <p class="package-warnings__title">Some referenced media files could not be found:</p>
+            <ul id="package-warnings-list" class="package-warnings__list"></ul>
+          </div>
+          <div class="table-scroll">
+            <table id="assets-table">
+              <thead>
+                <tr id="table-head-row"></tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </section>
+
+  </div>
+
+  <script id="daice-chain-data" type="application/json" hidden></script>
+  <script src="viewer.js"></script>
+</body>
+</html>

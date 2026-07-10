@@ -1,0 +1,84 @@
+import { z } from "zod";
+
+/**
+ * Zod schemas mirroring ../../../spec/schema/daice.schema.json.
+ * Any change here MUST be reflected in the JSON Schema and in
+ * ../../../spec/README.md in the same commit — see spec/README.md §0.
+ */
+
+const TIMECODE_PATTERN = /^\d{2}:\d{2}:\d{2}:\d{2}$/;
+
+export const contactSchema = z
+  .object({
+    name: z.string().min(1),
+    email: z.string().email().optional(),
+  })
+  .strict();
+
+export const packageMetadataSchema = z
+  .object({
+    id: z.string().min(1),
+    packageName: z.string().min(1),
+    description: z.string().optional(),
+    createdAt: z.string().datetime({ offset: true }),
+    createdBy: contactSchema,
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
+export const referenceSchema = z
+  .object({
+    assetId: z.string().min(1),
+    label: z.string().optional(),
+  })
+  .strict();
+
+const assetBaseSchema = z
+  .object({
+    id: z.string().min(1),
+    aiGenerated: z.boolean(),
+    provider: z.string().min(1).optional(),
+    model: z.string().min(1).optional(),
+    prompt: z.string().optional(),
+    generatedBy: contactSchema.optional(),
+    generatedAt: z.string().datetime({ offset: true }).optional(),
+    seed: z.number().int().optional(),
+    mediaPath: z.string().regex(/^assets\//, "mediaPath must start with \"assets/\"").optional(),
+    mediaMimeType: z.string().min(1).optional(),
+    references: z.array(referenceSchema),
+    timecodeIn: z.string().regex(TIMECODE_PATTERN, "timecodeIn must match HH:MM:SS:FF").optional(),
+    timecodeOut: z.string().regex(TIMECODE_PATTERN, "timecodeOut must match HH:MM:SS:FF").optional(),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
+export const assetSchema = assetBaseSchema.superRefine((asset, ctx) => {
+  if (asset.aiGenerated) {
+    if (!asset.provider) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["provider"], message: "provider is required when aiGenerated is true" });
+    }
+    if (!asset.model) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["model"], message: "model is required when aiGenerated is true" });
+    }
+    if (!asset.generatedBy) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["generatedBy"], message: "generatedBy is required when aiGenerated is true" });
+    }
+    if (!asset.generatedAt) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["generatedAt"], message: "generatedAt is required when aiGenerated is true" });
+    }
+  }
+  const hasIn = asset.timecodeIn !== undefined;
+  const hasOut = asset.timecodeOut !== undefined;
+  if (hasIn !== hasOut) {
+    const missing = hasIn ? "timecodeOut" : "timecodeIn";
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: [missing], message: `${missing} is required when the other timecode is present` });
+  }
+});
+
+export const daicePackageSchema = z
+  .object({
+    daiceVersion: z.literal("0.1.0"),
+    package: packageMetadataSchema,
+    assets: z.array(assetSchema),
+  })
+  .strict();

@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Token setup ported from document-ai's front/src/index.css (shadcn "slate"
+   convention), plus one extra --ai-accent pair carried over from the
+   viewer's palette (demo/viewer/viewer.css) to mark AI-generated rows/badges
+   — the one deliberate accent color in an otherwise neutral UI. */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+    --ai-accent: 262 83% 58%;
+    --ai-accent-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 10%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 210 40% 98%;
+      --primary-foreground: 222.2 47.4% 11.2%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 212.7 26.8% 83.9%;
+      --ai-accent: 263 90% 76%;
+      --ai-accent-foreground: 222.2 47.4% 11.2%;
+      --warning: 43 96% 56%;
+      --warning-foreground: 20 14% 8%;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Drop-target affordances used by the asset table's drag-and-drop (native
+   HTML5 DnD, see src/components/asset-table/). Kept as plain CSS rather than
+   Tailwind utilities since they're toggled via plain class names from
+   imperative drag event handlers, not conditional JSX classes. */
+.drop-target-valid {
+  outline: 2px dashed hsl(var(--ai-accent));
+  outline-offset: -2px;
+  background-color: hsl(var(--ai-accent) / 0.08);
+}
+
+.drop-target-invalid {
+  outline: 2px dashed hsl(var(--destructive));
+  outline-offset: -2px;
+  background-color: hsl(var(--destructive) / 0.08);
+}

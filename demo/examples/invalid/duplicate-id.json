@@ -1,0 +1,25 @@
+{
+  "daiceVersion": "0.1.0",
+  "package": {
+    "id": "invalid-duplicate-id",
+    "packageName": "Invalid: duplicate asset id",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": { "name": "Ada Example", "email": "ada@example.com" }
+  },
+  "assets": [
+    {
+      "id": "asset-a",
+      "aiGenerated": false,
+      "mediaPath": "assets/a.png",
+      "mediaMimeType": "image/png",
+      "references": []
+    },
+    {
+      "id": "asset-a",
+      "aiGenerated": false,
+      "mediaPath": "assets/a2.png",
+      "mediaMimeType": "image/png",
+      "references": []
+    }
+  ]
+}

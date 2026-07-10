@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://daice-chain.dev/schema/daice.schema.json",
+  "title": "DAICE-Chain Package",
+  "description": "A DAICE-Chain (Document AI in cinematic environments) package: metadata plus a set of documented assets and their reference lineage.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["daiceVersion", "package", "assets"],
+  "properties": {
+    "daiceVersion": {
+      "const": "0.1.0",
+      "description": "The DAICE-Chain specification version this package conforms to. Consumers MUST refuse to load a package with a daiceVersion they do not recognize, rather than guessing."
+    },
+    "package": { "$ref": "#/$defs/packageMetadata" },
+    "assets": {
+      "type": "array",
+      "description": "Every documented asset in this package, flat, regardless of how many there are or how deep their reference chains go. Nesting is expressed only through references between assets, not by nesting this array. MAY be empty. Deliberately an array (not a map keyed by id) so that duplicate ids can be detected during validation instead of being silently collapsed by JSON parsing.",
+      "items": { "$ref": "#/$defs/asset" }
+    }
+  },
+  "$defs": {
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Display name of the person or organisation."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact email address. RECOMMENDED but not required."
+        }
+      }
+    },
+    "packageMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "packageName", "createdAt", "createdBy"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A unique identifier for this package. A UUID is RECOMMENDED but any unique string is valid."
+        },
+        "packageName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "An administrative or contractual identifier for this package, e.g. a vendor and contract reference. Free text: \"vendorxyz_contract123\", \"acme_PO-4471_ep03-delivery\"."
+        },
+        "description": {
+          "type": "string",
+          "description": "An optional human-readable description of this package's contents or context, distinct from the contractual packageName."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When this package was assembled/exported (packaging time), not when the assets inside it were generated."
+        },
+        "createdBy": {
+          "$ref": "#/$defs/contact",
+          "description": "The package creator: a person or an organisation (e.g. the delivering vendor). This is the single point of contact for this package — there is no separate contact-email field."
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Free-form extension data. Implementations MUST preserve unknown metadata keys verbatim on round-trip (when they re-export). A common convention is a \"flight\" or \"delivery\" key to relate a vendor's successive packages; this is not a normative field."
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId"],
+      "properties": {
+        "assetId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Must match the id of another asset in this package's assets array. Every input to an asset — AI-generated or not — is itself an asset; there is no separate reference kind for plain files."
+        },
+        "label": {
+          "type": "string",
+          "description": "A short human description of this reference, e.g. \"style board\". Especially useful when the referenced asset has no mediaPath, to describe what the input was (e.g. \"licensed stock — Getty #12345\")."
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "aiGenerated", "references"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique within this package's assets array. RECOMMENDED to derive from the asset's media filename (e.g. \"hero-final\" for \"hero-final.jpg\"), appending a short disambiguating suffix if that would collide with another asset's id. A human-readable slug is fine; a UUID is not required here."
+        },
+        "aiGenerated": {
+          "type": "boolean",
+          "description": "true if this asset was produced by an AI generation process; false to explicitly document that it was not (e.g. a camera plate or licensed stock asset)."
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The generation provider, e.g. a named AI content-generation service or local pipeline. Free text with examples: \"Magnific\", \"Higgsfield\", \"Local (ComfyUI)\", \"Local render — no cloud\". Upstream engines MAY reconcile values across packages."
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The specific model or model version used. Free text, e.g. a named model variant."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "The prompt or equivalent generation instruction used. An empty string is valid for generations with no text prompt (e.g. image-to-image with no text guidance). SHOULD be present when aiGenerated is true, but MAY be omitted entirely — for example, when a vendor cannot disclose a proprietary or trade-secret prompt."
+        },
+        "generatedBy": {
+          "$ref": "#/$defs/contact",
+          "description": "Who ran the generation. MAY differ from the package creator (package.createdBy)."
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the generation happened. Distinct from package.createdAt (packaging time)."
+        },
+        "seed": {
+          "type": "integer",
+          "description": "The generation seed, when the provider/model exposes one and it was recorded. OPTIONAL — omit when unknown, not applicable, or not exposed by the generation process."
+        },
+        "mediaPath": {
+          "type": "string",
+          "pattern": "^assets/",
+          "description": "Path to the asset's media file, relative to the package root. MUST start with \"assets/\", e.g. \"assets/asset-root.jpg\"."
+        },
+        "mediaMimeType": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The file's MIME type, e.g. \"image/jpeg\", \"video/mp4\", \"audio/wav\". A writer SHOULD limit assets/ to review-friendly formats (PNG, JPEG, MP4, MOV, WAV, MP3) per spec/README.md §3, and SHOULD NOT include EXR, ProRes, or other high-data production deliveries. Not enforced as a closed set at the schema level."
+        },
+        "references": {
+          "type": "array",
+          "description": "Links to the other assets in this package that were used to create this one. MAY be empty for a leaf asset. Every reference points to another asset (see reference definition) — there is no plain-file reference kind.",
+          "items": { "$ref": "#/$defs/reference" }
+        },
+        "timecodeIn": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Where this asset starts in the final delivered show's timeline, as SMPTE-style HH:MM:SS:FF. Frame rate is out of band for v0.1.0. RECOMMENDED (SHOULD) together with timecodeOut when the asset was placed in the final show; an asset with both timecodes present is understood to have been used in the show. MUST be present together with timecodeOut, or omitted together."
+        },
+        "timecodeOut": {
+          "type": "string",
+          "pattern": "^\\d{2}:\\d{2}:\\d{2}:\\d{2}$",
+          "description": "Where this asset ends in the final delivered show's timeline, as SMPTE-style HH:MM:SS:FF, paired with timecodeIn. MUST be present together with timecodeIn, or omitted together."
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Free-form extension data. Implementations MUST preserve unknown metadata keys verbatim on round-trip (when they re-export)."
+        }
+      },
+      "if": {
+        "properties": { "aiGenerated": { "const": true } },
+        "required": ["aiGenerated"]
+      },
+      "then": {
+        "required": ["provider", "model", "generatedBy", "generatedAt"]
+      },
+      "dependentRequired": {
+        "timecodeIn": ["timecodeOut"],
+        "timecodeOut": ["timecodeIn"]
+      }
+    }
+  }
+}

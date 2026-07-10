@@ -1,0 +1,21 @@
+{
+  "daiceVersion": "0.1.0",
+  "package": {
+    "id": "invalid-missing-field",
+    "packageName": "Invalid: missing required provider",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": { "name": "Ada Example", "email": "ada@example.com" }
+  },
+  "assets": [
+    {
+      "id": "asset-a",
+      "aiGenerated": true,
+      "model": "ExampleModel",
+      "generatedBy": { "name": "Ada Example", "email": "ada@example.com" },
+      "generatedAt": "2026-07-01T09:05:00Z",
+      "mediaPath": "assets/a.png",
+      "mediaMimeType": "image/png",
+      "references": []
+    }
+  ]
+}

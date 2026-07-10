@@ -1,0 +1,19 @@
+{
+  "daiceVersion": "0.1.0",
+  "package": {
+    "id": "invalid-timecode-unpaired",
+    "packageName": "Invalid: timecodeIn present without timecodeOut",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": { "name": "Ada Example", "email": "ada@example.com" }
+  },
+  "assets": [
+    {
+      "id": "asset-a",
+      "aiGenerated": false,
+      "mediaPath": "assets/a.png",
+      "mediaMimeType": "image/png",
+      "references": [],
+      "timecodeIn": "01:00:00:00"
+    }
+  ]
+}

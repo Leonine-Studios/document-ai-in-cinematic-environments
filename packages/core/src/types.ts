@@ -10,10 +10,15 @@ export interface Contact {
   email?: string;
 }
 
+export type DaiceVersion = "0.1.0" | "0.2.0";
+
+export type DocumentationLevel = "detailed" | "simplified";
+
 export interface PackageMetadata {
   id: string;
   packageName: string;
   description?: string;
+  documentationLevel?: DocumentationLevel;
   createdAt: string;
   createdBy: Contact;
   metadata?: Record<string, unknown>;
@@ -41,9 +46,30 @@ export interface DaiceAsset {
   metadata?: Record<string, unknown>;
 }
 
+export interface DaiceTool {
+  provider: string;
+  model: string;
+  usedBy?: Contact[];
+  metadata?: Record<string, unknown>;
+}
+
+export interface DaiceStatement {
+  id: string;
+  text: string;
+}
+
+export interface DaiceDeclaration {
+  declaredBy: Contact;
+  declaredAt: string;
+  statements: DaiceStatement[];
+  metadata?: Record<string, unknown>;
+}
+
 export interface DaicePackage {
-  daiceVersion: "0.1.0";
+  daiceVersion: DaiceVersion;
   package: PackageMetadata;
+  tools?: DaiceTool[];
+  declarations?: DaiceDeclaration[];
   assets: DaiceAsset[];
 }
 

@@ -1,0 +1,14 @@
+{
+  "daiceVersion": "0.2.0",
+  "package": {
+    "id": "invalid-unknown-level",
+    "packageName": "Invalid: unknown documentation level",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    },
+    "documentationLevel": "medium"
+  },
+  "assets": []
+}

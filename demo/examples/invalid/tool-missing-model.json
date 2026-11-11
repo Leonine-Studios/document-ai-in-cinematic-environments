@@ -1,0 +1,18 @@
+{
+  "daiceVersion": "0.2.0",
+  "package": {
+    "id": "invalid-tool-missing-model",
+    "packageName": "Invalid: tool without model",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    }
+  },
+  "assets": [],
+  "tools": [
+    {
+      "provider": "Magnific"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "daiceVersion": "0.2.0",
+  "package": {
+    "id": "valid-simplified",
+    "packageName": "Valid: simplified package",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    },
+    "documentationLevel": "simplified"
+  },
+  "assets": [],
+  "tools": [
+    {
+      "provider": "Magnific",
+      "model": "ExampleModel v2"
+    },
+    {
+      "provider": "Magnific",
+      "model": "ExampleModel v2 Fast"
+    },
+    {
+      "provider": "Local (ComfyUI)",
+      "model": "ExampleUpscaler v1",
+      "usedBy": [
+        {
+          "name": "Ada Example",
+          "email": "ada@vendorxyz.example"
+        }
+      ]
+    }
+  ],
+  "declarations": [
+    {
+      "declaredBy": {
+        "name": "Ada Example",
+        "email": "ada@vendorxyz.example"
+      },
+      "declaredAt": "2026-07-01T09:05:00Z",
+      "statements": [
+        {
+          "id": "acme:no-training-on-inputs",
+          "text": "No AI tool used for this work trains on the input data provided to it."
+        },
+        {
+          "id": "streamco:no-inference-mainland-china",
+          "text": "No AI inference for this work runs in mainland China."
+        }
+      ]
+    }
+  ]
+}

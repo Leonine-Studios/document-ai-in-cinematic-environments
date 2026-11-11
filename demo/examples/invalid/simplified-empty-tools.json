@@ -1,0 +1,15 @@
+{
+  "daiceVersion": "0.2.0",
+  "package": {
+    "id": "invalid-simplified-empty-tools",
+    "packageName": "Invalid: simplified with empty tools",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    },
+    "documentationLevel": "simplified"
+  },
+  "assets": [],
+  "tools": []
+}

@@ -28,7 +28,7 @@
   // index.html/viewer.css/viewer.js as a set. Shown in the UI (see the
   // .js-viewer-version tags in index.html) so anyone who copy/pasted this
   // template into their own pipeline can tell which revision they're on.
-  var VIEWER_VERSION = "0.1.0";
+  var VIEWER_VERSION = "0.2.0";
 
   // --- Validation ----------------------------------------------------
   // Plain-JS mirror of DAICE-Chain v0.1.0 (see spec/README.md and
@@ -112,11 +112,14 @@
       errors.push({ path: path, message: "package must be an object" });
       return;
     }
-    rejectUnknownKeys(pkg, path, ["id", "packageName", "description", "createdAt", "createdBy", "metadata"], errors);
+    rejectUnknownKeys(pkg, path, ["id", "packageName", "description", "documentationLevel", "createdAt", "createdBy", "metadata"], errors);
     requireNonEmptyString(pkg.id, joinPath(path, "id"), errors);
     requireNonEmptyString(pkg.packageName, joinPath(path, "packageName"), errors);
     if (pkg.description !== undefined && typeof pkg.description !== "string") {
       errors.push({ path: joinPath(path, "description"), message: "description must be a string" });
+    }
+    if (pkg.documentationLevel !== undefined && pkg.documentationLevel !== "detailed" && pkg.documentationLevel !== "simplified") {
+      errors.push({ path: joinPath(path, "documentationLevel"), message: 'documentationLevel must be "detailed" or "simplified"' });
     }
     requireDateTime(pkg.createdAt, joinPath(path, "createdAt"), errors);
     validateContact(pkg.createdBy, joinPath(path, "createdBy"), errors);
@@ -254,22 +257,109 @@
     return errors;
   }
 
+  function validateTools(tools, errors) {
+    if (tools === undefined) return;
+    if (!Array.isArray(tools)) {
+      errors.push({ path: "tools", message: "tools must be an array" });
+      return;
+    }
+    tools.forEach(function (tool, i) {
+      var path = "tools[" + i + "]";
+      if (!isPlainObject(tool)) {
+        errors.push({ path: path, message: "tool must be an object" });
+        return;
+      }
+      rejectUnknownKeys(tool, path, ["provider", "model", "usedBy", "metadata"], errors);
+      requireNonEmptyString(tool.provider, joinPath(path, "provider"), errors);
+      requireNonEmptyString(tool.model, joinPath(path, "model"), errors);
+      if (tool.usedBy !== undefined) {
+        if (!Array.isArray(tool.usedBy)) {
+          errors.push({ path: joinPath(path, "usedBy"), message: "usedBy must be an array" });
+        } else {
+          tool.usedBy.forEach(function (c, j) {
+            validateContact(c, joinPath(path, "usedBy") + "[" + j + "]", errors);
+          });
+        }
+      }
+      if (tool.metadata !== undefined && !isPlainObject(tool.metadata)) {
+        errors.push({ path: joinPath(path, "metadata"), message: "metadata must be an object" });
+      }
+    });
+  }
+
+  function validateDeclarations(declarations, errors) {
+    if (declarations === undefined) return;
+    if (!Array.isArray(declarations)) {
+      errors.push({ path: "declarations", message: "declarations must be an array" });
+      return;
+    }
+    declarations.forEach(function (decl, i) {
+      var path = "declarations[" + i + "]";
+      if (!isPlainObject(decl)) {
+        errors.push({ path: path, message: "declaration must be an object" });
+        return;
+      }
+      rejectUnknownKeys(decl, path, ["declaredBy", "declaredAt", "statements", "metadata"], errors);
+      validateContact(decl.declaredBy, joinPath(path, "declaredBy"), errors);
+      requireDateTime(decl.declaredAt, joinPath(path, "declaredAt"), errors);
+      if (decl.metadata !== undefined && !isPlainObject(decl.metadata)) {
+        errors.push({ path: joinPath(path, "metadata"), message: "metadata must be an object" });
+      }
+      if (!Array.isArray(decl.statements) || decl.statements.length === 0) {
+        errors.push({ path: joinPath(path, "statements"), message: "statements must be a non-empty array" });
+        return;
+      }
+      var seen = {};
+      decl.statements.forEach(function (st, j) {
+        var sp = joinPath(path, "statements") + "[" + j + "]";
+        if (!isPlainObject(st)) {
+          errors.push({ path: sp, message: "statement must be an object" });
+          return;
+        }
+        rejectUnknownKeys(st, sp, ["id", "text"], errors);
+        requireNonEmptyString(st.id, joinPath(sp, "id"), errors);
+        requireNonEmptyString(st.text, joinPath(sp, "text"), errors);
+        if (typeof st.id === "string" && st.id.length > 0) {
+          if (seen[st.id]) {
+            errors.push({
+              path: joinPath(sp, "id"),
+              message: 'duplicate statement id "' + st.id + '" — statement ids must be unique within a declaration',
+            });
+          }
+          seen[st.id] = true;
+        }
+      });
+    });
+  }
+
   function validatePackage(input) {
     if (!isPlainObject(input)) {
       return { valid: false, errors: [{ path: "(root)", message: "A DAICE-Chain package must be a JSON object." }] };
     }
 
     var errors = [];
-    rejectUnknownKeys(input, "", ["daiceVersion", "package", "assets"], errors);
+    rejectUnknownKeys(input, "", ["daiceVersion", "package", "tools", "declarations", "assets"], errors);
 
-    if (input.daiceVersion !== "0.1.0") {
+    if (input.daiceVersion !== "0.1.0" && input.daiceVersion !== "0.2.0") {
       errors.push({
         path: "daiceVersion",
-        message: "unrecognized daiceVersion: " + JSON.stringify(input.daiceVersion) + '. This implementation only supports "0.1.0".',
+        message: "unrecognized daiceVersion: " + JSON.stringify(input.daiceVersion) + '. This implementation only supports "0.1.0" and "0.2.0".',
       });
     }
 
     validatePackageMetadata(input.package, "package", errors);
+    validateTools(input.tools, errors);
+    validateDeclarations(input.declarations, errors);
+    if (isPlainObject(input.package) && input.package.documentationLevel === "simplified" && (!Array.isArray(input.tools) || input.tools.length === 0)) {
+      errors.push({ path: "tools", message: "tools is required (at least one entry) when documentationLevel is simplified" });
+    }
+    if (input.daiceVersion === "0.1.0") {
+      if (input.tools !== undefined) errors.push({ path: "tools", message: 'tools requires daiceVersion "0.2.0"' });
+      if (input.declarations !== undefined) errors.push({ path: "declarations", message: 'declarations requires daiceVersion "0.2.0"' });
+      if (isPlainObject(input.package) && input.package.documentationLevel !== undefined) {
+        errors.push({ path: "package.documentationLevel", message: 'documentationLevel requires daiceVersion "0.2.0"' });
+      }
+    }
 
     var assets = Array.isArray(input.assets) ? input.assets : null;
     if (!assets) {
@@ -516,9 +606,87 @@
     currentPackage = result.package;
     resetMediaWarnings();
     renderHeader(currentPackage.package);
+    renderPackageExtras(currentPackage);
     renderTable(currentPackage);
     runMediaIntegrityCheck(currentPackage);
     showScreen("viewer");
+  }
+
+  function renderContactList(contacts) {
+    return contacts.map(function (c) { return c.name + (c.email ? " (" + c.email + ")" : ""); }).join(", ");
+  }
+
+  function renderPackageExtras(data) {
+    var level = data.package.documentationLevel === "simplified" ? "simplified" : "detailed";
+    var levelEl = document.getElementById("pkg-level");
+    if (levelEl) levelEl.textContent = level === "simplified" ? "Simplified" : "Detailed";
+
+    // Tools
+    var toolsView = document.getElementById("tools-view");
+    var tools = data.tools || [];
+    var toolsBody = document.getElementById("tools-body");
+    toolsBody.textContent = "";
+    tools.forEach(function (tool) {
+      var tr = document.createElement("tr");
+      [tool.provider, tool.model, tool.usedBy && tool.usedBy.length ? renderContactList(tool.usedBy) : data.package.createdBy.name].forEach(
+        function (text) {
+          var td = document.createElement("td");
+          td.textContent = text;
+          tr.appendChild(td);
+        },
+      );
+      toolsBody.appendChild(tr);
+    });
+    toolsView.hidden = tools.length === 0;
+
+    // Declarations
+    var declView = document.getElementById("declarations-view");
+    var declList = document.getElementById("declarations-list");
+    declList.textContent = "";
+    var declarations = data.declarations || [];
+    declarations.forEach(function (decl) {
+      var card = document.createElement("article");
+      card.className = "declaration";
+      var head = document.createElement("p");
+      head.className = "declaration__head";
+      head.textContent =
+        "Declared by " + decl.declaredBy.name + (decl.declaredBy.email ? " (" + decl.declaredBy.email + ")" : "") +
+        " on " + formatDate(decl.declaredAt);
+      card.appendChild(head);
+      var groups = [];
+      var bySource = {};
+      decl.statements.forEach(function (st) {
+        var colon = st.id.indexOf(":");
+        var key = colon > 0 ? st.id.slice(0, colon) : "";
+        if (!bySource[key]) {
+          bySource[key] = [];
+          groups.push(key);
+        }
+        bySource[key].push(st);
+      });
+      groups.forEach(function (key) {
+        if (key) {
+          var h = document.createElement("h3");
+          h.className = "declaration__source";
+          h.textContent = key;
+          card.appendChild(h);
+        }
+        var ul = document.createElement("ul");
+        ul.className = "declaration__statements";
+        bySource[key].forEach(function (st) {
+          var li = document.createElement("li");
+          li.className = "statement";
+          li.textContent = st.text;
+          ul.appendChild(li);
+        });
+        card.appendChild(ul);
+      });
+      declList.appendChild(card);
+    });
+    declView.hidden = declarations.length === 0;
+
+    // A simplified package with no assets documents tools only: no empty asset table.
+    document.getElementById("table-view").hidden = level === "simplified" && data.assets.length === 0;
   }
 
   function renderHeader(pkg) {

@@ -20,6 +20,8 @@ addFormats(ajv);
 const jsonSchemaValidate = ajv.compile(jsonSchema);
 
 const invalidDir = path.resolve(here, "../../../demo/examples/invalid");
+const validDir = path.resolve(here, "../../../demo/examples/valid");
+const validFixtureNames = readdirSync(validDir).filter((f) => f.endsWith(".json"));
 const invalidFixtureNames = readdirSync(invalidDir).filter((f) => f.endsWith(".json"));
 
 describe("JSON Schema and Zod schema agree", () => {
@@ -35,6 +37,12 @@ describe("JSON Schema and Zod schema agree", () => {
     expect(validatePackage(pkg).valid).toBe(true);
   });
 
+  it.each(validFixtureNames)("both accept valid fixture %s", (name) => {
+    const fixture = loadFixture("valid", name);
+    expect(jsonSchemaValidate(fixture)).toBe(true);
+    expect(validatePackage(fixture).valid).toBe(true);
+  });
+
   it.each(invalidFixtureNames)("both reject invalid fixture %s (schema-level failures only)", (name) => {
     const fixture = loadFixture("invalid", name);
     const zodResult = validatePackage(fixture);
@@ -43,7 +51,12 @@ describe("JSON Schema and Zod schema agree", () => {
     // Referential-integrity-only failures (dangling ref, duplicate id, cycle) are valid
     // per the JSON Schema alone by design — that layer is checked separately by
     // validatePackage, per spec/README.md §4. Every other fixture must fail both.
-    const referentialOnly = ["dangling-reference.json", "duplicate-id.json", "reference-cycle.json"];
+    const referentialOnly = [
+      "dangling-reference.json",
+      "duplicate-id.json",
+      "reference-cycle.json",
+      "declaration-duplicate-statement-id.json",
+    ];
     if (referentialOnly.includes(name)) {
       expect(jsonSchemaResult).toBe(true);
       expect(zodResult.valid).toBe(false);

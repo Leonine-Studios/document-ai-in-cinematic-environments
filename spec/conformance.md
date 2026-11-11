@@ -13,7 +13,9 @@ A conformant reader (viewer, editor, or any other tool that loads a `daice.json`
    - Every `{ "assetId": ... }` reference resolves to an existing asset `id`.
    - Every asset `id` is unique within the package.
    - No reference cycle exists (no asset transitively references itself).
-3. Reject any `daiceVersion` it does not implement, rather than guessing at forward or backward compatibility.
+   - Statement `id`s are unique within each declaration.
+   - A package labelled `"0.1.0"` contains no `documentationLevel`, `tools`, or `declarations`.
+3. Reject any `daiceVersion` it does not implement, rather than guessing at forward or backward compatibility. A reader that implements `"0.2.0"` MUST also accept `"0.1.0"`.
 4. On any failure from steps 1–3, refuse to load the package and present **specific, path-scoped errors** (e.g. `assets[2].provider is required`) rather than a generic message, a stack trace, or a blank/broken UI.
 5. Treat loading as all-or-nothing: never render or operate on a partially-valid package.
 
@@ -26,7 +28,8 @@ A conformant writer (an editor, a vendor-side authoring tool, or any tool that p
 1. Only emit a `daice.json` that validates against the current schema.
 2. When exporting a package, ensure every `mediaPath` resolves to an actual file inside the package's `assets/` folder. Writers SHOULD attempt to include media for every referenced asset, not just an asset's own output, whenever that media can be obtained (specification §2.3); omitting `mediaPath` on a referenced asset because the media is unavailable is not a conformance failure.
 3. Produce a package that matches the layout in specification §3 (`daice.json`, `assets/`, and an OPTIONAL `index.html`). If an `index.html` viewer is included, it MUST function fully offline, loading no script, stylesheet, font, image, or other resource from outside the package — see §4.
-4. SHOULD limit `assets/` to the review-friendly formats listed in specification §3 (PNG, JPEG, MP4, MOV, WAV, MP3); SHOULD NOT include EXR, ProRes, or other high-data production deliveries. Readers are not required to validate this.
+4. Write `"0.2.0"` as `daiceVersion` as soon as the package uses `documentationLevel`, `tools`, or `declarations`.
+5. SHOULD limit `assets/` to the review-friendly formats listed in specification §3 (PNG, JPEG, MP4, MOV, WAV, MP3); SHOULD NOT include EXR, ProRes, or other high-data production deliveries. Readers are not required to validate this.
 
 This applies to a vendor authoring a brand-new package as much as it does to a client re-exporting one it imported.
 
@@ -38,6 +41,7 @@ A conformant editor or re-exporting tool MUST be able to import a valid package,
 
 - Every specification-defined field not touched by an edit keeps its original value.
 - Every `metadata` key, at package or asset level, is preserved verbatim even if the tool does not interpret it.
+- `tools` and `declarations` are preserved. A tool MUST NOT change, re-date, or remove a declaration it did not create, and MUST NOT mask its `declaredBy`; it MAY add its own. Masking a `usedBy` contact at the user's explicit request is allowed.
 
 This applies whether the import is a full package (with or without an `index.html` viewer) or a bare `daice.json` plus its `assets/` folder.
 
@@ -47,6 +51,7 @@ A viewer and an editor are distinct roles (see [`glossary.md`](glossary.md)): a 
 
 - Render correctly when `index.html` is opened directly from the filesystem (`file://`), not only when served over HTTP.
 - Never load or call any resource from outside the package it ships inside — no remote script, stylesheet, font, image, media, analytics/telemetry beacon, or `fetch`/`XHR` to any origin other than the package's own files. Every resource a viewer references MUST resolve inside the same package (see specification §3). There is no partial exception (e.g. "just a web font," "just an analytics pixel") — a viewer is fully self-contained.
+- Show the package's documentation level, its `tools`, and its `declarations` (who declared, when, and the text of each statement) when present, and give a simplified package with no assets a meaningful display rather than an empty asset table.
 - Provide a way to browse the package's assets and to inspect any asset's lineage (its unfolded reference chain). A package may document many assets (dozens to hundreds) with several independent lineages side by side; whatever UI satisfies this MUST scale to that without requiring every lineage open at once. This document does not prescribe a specific UI pattern for satisfying this (table, tree, hierarchical table, or otherwise) — see this repository's own viewer for one example approach.
 - Be read-only: a viewer MUST NOT offer editing, re-export, package assembly, or conversion to another format (PDF, spreadsheet, or otherwise). These are editor-class (or other separate-tool) capabilities — see §2 and §3 — deliberately kept out of the viewer to keep it small and safe to embed, unmodified, in any package that chooses to include one.
 - Automatically load and render only its own package: whenever the runtime permits it (an inline data block, or `fetch` when served over HTTP(S)), a viewer MUST load with zero user interaction. It MUST NOT present itself as a general-purpose tool for opening arbitrary DAICE-Chain packages. Over `file://`, where browsers block a page from reading local files automatically, a viewer MAY fall back to prompting the user to select this same package's own `daice.json` (and, optionally, its own `assets/` folder) — a narrow accommodation for that sandboxing, not a standing invitation to browse to an unrelated package.

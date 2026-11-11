@@ -34,6 +34,8 @@ A **package** (`daice.json`) is typically one vendor delivery: minimal top-level
 
 `createdBy` and `generatedBy` are both a `contact` object (`{ name, email? }`) — named `contact`, not `person`, because it's just as often a company (e.g. the delivering vendor) as it is an individual.
 
+**v0.2.0 draft additions.** `package.documentationLevel` is `"detailed"` (default; everything above) or `"simplified"`, which documents only which AI tools were used (`tools`: provider/model pairs, optionally with `usedBy`) and needs no per-asset documentation. A top-level `declarations` list records statements a party agreed to about the conditions the tools were used under (for example, that no tool trains on input data). The specification defines no statements; it only defines the container.
+
 Because references point to other entries in the same `assets` list, a package captures a full directed lineage graph — the same input can be shared by multiple downstream assets — not just a flat record or a single tree. See [`spec/README.md`](spec/README.md) for the full normative specification.
 
 ## Package layout
@@ -48,6 +50,8 @@ my-package.daice.zip
 `assets/` holds review and handoff proxies (PNG, JPEG, MP4, MOV, WAV, MP3) rather than production-grade deliverables — a writer SHOULD NOT ship EXR, ProRes, or similar high-data formats there. See [`spec/README.md`](spec/README.md) §3.
 
 ## Status
+
+> **v0.2.0 is a working draft on this branch and is not published.** It adds a simplified documentation level (which AI tools were used, and by whom), a top-level `tools` list, and `declarations`. Every v0.1.0 package stays valid. See [`spec/README.md`](spec/README.md).
 
 This is a proof-of-concept implementation of DAICE-Chain v0.1.0 — the first public pre-release of the specification and reference tooling, ready for use and open for discussion. The specification in [`spec/`](spec/) is the normative artifact; the editor and extension are illustrative and may change independently.
 

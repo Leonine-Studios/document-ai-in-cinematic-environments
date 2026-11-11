@@ -756,3 +756,15 @@ table.hide-col-mimeType [data-col="mimeType"] {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
+
+/* --- v0.2.0: documentation level, tools, declarations -------------------- */
+.extra-section { margin: 0 0 24px; }
+.extra-section h2 { font-size: 1rem; margin: 0 0 8px; }
+.simple-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.simple-table th, .simple-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--color-border); }
+.simple-table th { color: var(--color-text-muted); font-weight: 600; }
+.declaration { border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); padding: 12px 16px; margin-bottom: 12px; }
+.declaration__head { margin: 0 0 8px; font-size: 0.8125rem; color: var(--color-text-muted); }
+.declaration__source { margin: 12px 0 4px; font-size: 0.8125rem; font-weight: 600; }
+.declaration__statements { list-style: none; margin: 0; padding: 0; }
+.statement { padding: 4px 0; font-size: 0.875rem; }

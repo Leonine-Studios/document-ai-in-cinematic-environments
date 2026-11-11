@@ -1,0 +1,13 @@
+{
+  "daiceVersion": "0.1.0",
+  "package": {
+    "id": "valid-legacy",
+    "packageName": "Valid: v0.1.0 package",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    }
+  },
+  "assets": []
+}

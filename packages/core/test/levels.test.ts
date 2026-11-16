@@ -8,8 +8,8 @@ describe("documentationLevelOf", () => {
   it("defaults to detailed", () => {
     expect(documentationLevelOf(demoPackage() as DaicePackage)).toBe("detailed");
   });
-  it("reads simplified", () => {
-    expect(documentationLevelOf(validFixture("simplified-package.json") as DaicePackage)).toBe("simplified");
+  it("reads simple", () => {
+    expect(documentationLevelOf(validFixture("simple-package.json") as DaicePackage)).toBe("simple");
   });
 });
 

@@ -19,10 +19,10 @@ Files in the package's `assets/` folder are review and handoff proxies, not full
 A boolean on every asset stating whether it was produced by an AI generation process. `false` is a deliberate, explicit statement that an asset is not AI-generated, allowing a lineage chain to terminate in verifiably non-AI material.
 
 **Documentation level**
-`package.documentationLevel`: `detailed` (the default; per-asset provenance and lineage) or `simplified` (which AI tools were used, and by whom, with no per-asset documentation). Which level a delivery needs is agreed outside the package. See `spec/README.md` §0.
+`package.documentationLevel`: `detailed` (the default; per-asset provenance and lineage) or `simple` (which AI tools were used, and by whom, with no per-asset documentation). Which level a delivery needs is agreed outside the package. See `spec/README.md` §0.
 
 **Tool**
-One entry of the top-level `tools` array: a provider/model pair used for the work a package covers, optionally with the contacts who used it (`usedBy`). Required (at least one) in a simplified package; optional in a detailed one. See `spec/README.md` §2.6.
+One entry of the top-level `tools` array: a provider/model pair used for the work a package covers, optionally with the contacts who used it (`usedBy`). Required (at least one) in a simple package; optional in a detailed one. See `spec/README.md` §2.6.
 
 **Declaration**
 An entry of the top-level `declarations` array: who declared (`declaredBy`), when (`declaredAt`), and a list of statements they agreed to about the conditions under which AI tools were used. Independent of the documentation level; optional (MAY) at both. See `spec/README.md` §2.7.

@@ -77,8 +77,8 @@ describe("validatePackage", () => {
   });
 
   describe("v0.2.0: documentation levels, tools, declarations", () => {
-    it("accepts a simplified package and a detailed one with tools and a declaration", () => {
-      expect(validatePackage(validFixture("simplified-package.json")).valid).toBe(true);
+    it("accepts a simple package and a detailed one with tools and a declaration", () => {
+      expect(validatePackage(validFixture("simple-package.json")).valid).toBe(true);
       expect(validatePackage(validFixture("detailed-with-tools-and-declaration.json")).valid).toBe(true);
     });
 
@@ -86,8 +86,8 @@ describe("validatePackage", () => {
       expect(validatePackage(validFixture("legacy-v0.1.0.json")).valid).toBe(true);
     });
 
-    it("rejects a simplified package with no tools, or an empty tools list", () => {
-      for (const name of ["simplified-missing-tools.json", "simplified-empty-tools.json"]) {
+    it("rejects a simple package with no tools, or an empty tools list", () => {
+      for (const name of ["simple-missing-tools.json", "simple-empty-tools.json"]) {
         const result = validatePackage(invalidFixture(name));
         expect(result.valid).toBe(false);
         expect(result.errors.some((e) => e.path === "tools")).toBe(true);

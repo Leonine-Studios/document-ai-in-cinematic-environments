@@ -118,8 +118,8 @@
     if (pkg.description !== undefined && typeof pkg.description !== "string") {
       errors.push({ path: joinPath(path, "description"), message: "description must be a string" });
     }
-    if (pkg.documentationLevel !== undefined && pkg.documentationLevel !== "detailed" && pkg.documentationLevel !== "simplified") {
-      errors.push({ path: joinPath(path, "documentationLevel"), message: 'documentationLevel must be "detailed" or "simplified"' });
+    if (pkg.documentationLevel !== undefined && pkg.documentationLevel !== "detailed" && pkg.documentationLevel !== "simple") {
+      errors.push({ path: joinPath(path, "documentationLevel"), message: 'documentationLevel must be "detailed" or "simple"' });
     }
     requireDateTime(pkg.createdAt, joinPath(path, "createdAt"), errors);
     validateContact(pkg.createdBy, joinPath(path, "createdBy"), errors);
@@ -350,8 +350,8 @@
     validatePackageMetadata(input.package, "package", errors);
     validateTools(input.tools, errors);
     validateDeclarations(input.declarations, errors);
-    if (isPlainObject(input.package) && input.package.documentationLevel === "simplified" && (!Array.isArray(input.tools) || input.tools.length === 0)) {
-      errors.push({ path: "tools", message: "tools is required (at least one entry) when documentationLevel is simplified" });
+    if (isPlainObject(input.package) && input.package.documentationLevel === "simple" && (!Array.isArray(input.tools) || input.tools.length === 0)) {
+      errors.push({ path: "tools", message: "tools is required (at least one entry) when documentationLevel is simple" });
     }
     if (input.daiceVersion === "0.1.0") {
       if (input.tools !== undefined) errors.push({ path: "tools", message: 'tools requires daiceVersion "0.2.0"' });
@@ -617,9 +617,9 @@
   }
 
   function renderPackageExtras(data) {
-    var level = data.package.documentationLevel === "simplified" ? "simplified" : "detailed";
+    var level = data.package.documentationLevel === "simple" ? "simple" : "detailed";
     var levelEl = document.getElementById("pkg-level");
-    if (levelEl) levelEl.textContent = level === "simplified" ? "Simplified" : "Detailed";
+    if (levelEl) levelEl.textContent = level === "simple" ? "Simple" : "Detailed";
 
     // Tools
     var toolsView = document.getElementById("tools-view");
@@ -685,8 +685,8 @@
     });
     declView.hidden = declarations.length === 0;
 
-    // A simplified package with no assets documents tools only: no empty asset table.
-    document.getElementById("table-view").hidden = level === "simplified" && data.assets.length === 0;
+    // A simple package with no assets documents tools only: no empty asset table.
+    document.getElementById("table-view").hidden = level === "simple" && data.assets.length === 0;
   }
 
   function renderHeader(pkg) {

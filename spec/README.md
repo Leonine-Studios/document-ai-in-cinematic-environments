@@ -1,6 +1,6 @@
 # DAICE-Chain Specification v0.2.0 (working draft)
 
-> **Working draft — not yet published.** v0.2.0 adds a *simplified* documentation level, a list of AI tools, and declarations. It is being worked out and may still change. The last published version is v0.1.0; every v0.1.0 package remains valid under this draft (see §6).
+> **Working draft — not yet published.** v0.2.0 adds a *simple* documentation level, a list of AI tools, and declarations. It is being worked out and may still change. The last published version is v0.1.0; every v0.1.0 package remains valid under this draft (see §6).
 
 This is the normative specification for DAICE-Chain (Document AI in cinematic environments). v0.1.0 was published as a first public pre-release; this document is the v0.2.0 working draft. It is intended to be understandable on its own, without reading any code. The machine-readable version of everything below lives in `[schema/daice.schema.json](schema/daice.schema.json)` and MUST stay consistent with this document — if you change one, change the other in the same commit.
 
@@ -26,9 +26,9 @@ Nothing in the schema distinguishes these flows — a package looks the same eit
 A package is written at one of two documentation levels:
 
 - **Detailed** (the default): the package documents each AI asset individually — provider, model, who generated it and when, the prompt where it can be shared, and its lineage. This is the v0.1.0 model, unchanged.
-- **Simplified**: the package documents which AI tools were used for the work it covers, and by whom. It needs no per-asset documentation; it answers "who used what", not "how was each asset made".
+- **Simple**: the package documents which AI tools were used for the work it covers, and by whom. It needs no per-asset documentation; it answers "who used what", not "how was each asset made".
 
-Which level a delivery needs is agreed between the parties outside the package, for example in the contract. A simplified package is not an unfinished detailed package; it is complete at its level. A recipient MAY accept a detailed package where only a simplified one is required.
+Which level a delivery needs is agreed between the parties outside the package, for example in the contract. A simple package is not an unfinished detailed package; it is complete at its level. A recipient MAY accept a detailed package where only a simple one is required.
 
 Declarations (§2.7) are independent of the level: detailed provenance neither replaces nor implies a declaration.
 
@@ -38,7 +38,7 @@ Declarations (§2.7) are independent of the level: detailed provenance neither r
 - **Asset** — one documented thing: usually a media file (an image, video, or audio file), but conceptually any output that can be described with a prompt, a model, and a creator. Every asset in a package is listed once, flat, in the package's `assets` array. A non-AI input (a camera plate, a licensed stock image, a style reference board) is also an asset — one with `aiGenerated: false` — not a separate kind of thing.
 - **Reference** — a link from one asset to another asset in the same package that was used to create it. Because every input is itself an asset, there is only one kind of reference.
 - **Lineage / lineage chain** — the graph obtained by starting at one asset and recursively following its references. Because references point to other entries in the same `assets` array rather than duplicating them, the same input asset can be referenced by more than one downstream asset (it is a directed acyclic graph, not necessarily a tree). Unfolding a lineage chain shows exactly what was used, at every step, to arrive at a given asset.
-- **Documentation level** — `detailed` (per-asset provenance, the default) or `simplified` (which AI tools were used, and by whom). See §0.
+- **Documentation level** — `detailed` (per-asset provenance, the default) or `simple` (which AI tools were used, and by whom). See §0.
 - **Tool** — one provider/model pair used for the work in a package, optionally with who used it. See §2.6.
 - **Declaration** — a set of statements a party has agreed to about the conditions under which AI tools were used (for example, that no tool trains on the input data). See §2.7.
 - `aiGenerated` **flag** — every asset declares whether it was produced by AI. Setting it to `false` is a deliberate, explicit statement that nothing about that particular asset was AI-generated; it exists so a lineage chain can terminate in verifiably non-AI material.
@@ -62,9 +62,9 @@ A package's canonical data lives in exactly one file, `daice.json`, at the root 
 | -------------- | ----------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `daiceVersion` | string, `"0.1.0"` or `"0.2.0"` | MUST        | The specification version this file conforms to. A writer MUST use `"0.2.0"` as soon as the file uses `documentationLevel`, `tools`, or `declarations`. |
 | `package`      | object                  | MUST        | Package-level metadata. See §2.2.                                                                                                                                                                                  |
-| `tools`        | array of tool objects   | MUST if `package.documentationLevel` is `"simplified"` (at least one entry); otherwise MAY | The AI tools used for the work this package covers. See §2.6. Requires `daiceVersion` `"0.2.0"`. |
+| `tools`        | array of tool objects   | MUST if `package.documentationLevel` is `"simple"` (at least one entry); otherwise MAY | The AI tools used for the work this package covers. See §2.6. Requires `daiceVersion` `"0.2.0"`. |
 | `declarations` | array of declaration objects | MAY | Statements a party agreed to about how the tools were used. See §2.7. Requires `daiceVersion` `"0.2.0"`. |
-| `assets`       | array of asset objects  | MUST        | Every documented asset in the package, flat, however many there are. MAY be empty — for a package that documents nothing yet, or a simplified package that documents tools only. See "Why `assets` is an array" above. |
+| `assets`       | array of asset objects  | MUST        | Every documented asset in the package, flat, however many there are. MAY be empty — for a package that documents nothing yet, or a simple package that documents tools only. See "Why `assets` is an array" above. |
 
 
 Implementations MUST refuse to load a `daice.json` whose `daiceVersion` they do not recognize (for example, a future `"2.0"`), rather than guessing at compatibility. This is a safety property, not a strictness-for-its-own-sake rule: silently misinterpreting a newer format is worse than refusing to open it.
@@ -79,7 +79,7 @@ Deliberately minimal, per the specification's design goal of not overloading the
 | `id`          | string                     | MUST        | A unique identifier for this package. A UUID is RECOMMENDED but any unique string is valid.                                                                                                                                                                                                            |
 | `packageName` | string                     | MUST        | An administrative or contractual identifier for this package — it ties the delivery to a vendor, contract, or purchase order, not to a creative description. Free text, e.g. `"vendorxyz_contract123"` or `"acme_PO-4471_ep03-delivery"`.                                                              |
 | `description` | string                     | MAY         | An optional human-readable description of this package's contents or context, distinct from the contractual `packageName`.                                                                                                                                                                             |
-| `documentationLevel` | `"detailed"` or `"simplified"` | MAY | The documentation level (see §0). A missing value means `"detailed"`. Requires `daiceVersion` `"0.2.0"`. |
+| `documentationLevel` | `"detailed"` or `"simple"` | MAY | The documentation level (see §0). A missing value means `"detailed"`. Requires `daiceVersion` `"0.2.0"`. |
 | `createdAt`   | string, ISO 8601 date-time | MUST        | When this package was assembled/exported (packaging time) — not when the assets inside it were generated.                                                                                                                                                                                              |
 | `createdBy`   | contact object             | MUST        | The package creator: a person or an organisation (for example, the delivering vendor). This is the single point of contact for the package — there is no separate contact-email field; use `createdBy.email`. See §2.4.                                                                                |
 | `metadata`    | object                     | MAY         | Free-form extension data for fields this specification doesn't define. Implementations MUST preserve unknown `metadata` keys verbatim when they re-export a package (see §5, round-trip). A common, non-normative convention is a `flight` or `delivery` key to relate a vendor's successive packages. |
@@ -158,7 +158,7 @@ One entry per provider/model pair used for the work this package covers — the 
 | `metadata` | object          | MAY         | Free-form extension data, preserved verbatim on re-export. |
 
 - A package SHOULD list each provider/model pair only once. Readers MAY merge duplicates.
-- In a **simplified** package, `tools` is the documentation itself and MUST contain at least one entry.
+- In a **simple** package, `tools` is the documentation itself and MUST contain at least one entry.
 - In a **detailed** package, `tools` MAY be present to list the tools used.
 
 ### 2.7 `declarations[]` — declarations and statements
@@ -188,7 +188,7 @@ A declaration is a set of statements a party agreed to about the conditions unde
 ### 2.8 Rules per documentation level
 
 - **Detailed:** everything as in v0.1.0. `tools` and `declarations` MAY be present.
-- **Simplified:** `tools` MUST be present with at least one entry. `assets` MUST still be present and MAY be empty; any assets it does include are validated exactly as in a detailed package. The `assets/` folder MAY be empty or missing when no asset has a `mediaPath` (§3). `declarations` MAY be present.
+- **Simple:** `tools` MUST be present with at least one entry. `assets` MUST still be present and MAY be empty; any assets it does include are validated exactly as in a detailed package. The `assets/` folder MAY be empty or missing when no asset has a `mediaPath` (§3). `declarations` MAY be present.
 
 ## 3. Package layout
 
@@ -240,7 +240,7 @@ Every implementation that reads a `daice.json` — whether a viewer, an editor, 
 
 - Validate structurally against `[schema/daice.schema.json](schema/daice.schema.json)` first.
 - Then validate referential integrity: every `reference.assetId` MUST exist in `assets`; every asset `id` MUST be unique; there MUST be no reference cycles.
-- Validate the v0.2.0 rules: a `simplified` package has `tools` with at least one entry; every tool has a `provider` and a `model`; statement `id`s are unique within a declaration; and a package labelled `"0.1.0"` does not contain `documentationLevel`, `tools`, or `declarations`.
+- Validate the v0.2.0 rules: a `simple` package has `tools` with at least one entry; every tool has a `provider` and a `model`; statement `id`s are unique within a declaration; and a package labelled `"0.1.0"` does not contain `documentationLevel`, `tools`, or `declarations`.
 - Reject an unrecognized or newer `daiceVersion` rather than attempting best-effort interpretation.
 - On any failure, report **specific, path-scoped errors** (for example, `assets[2].provider is required`, or `assets[1].references[0].assetId does not match any asset id`) rather than a generic failure message or a stack trace.
 - Loading a package is **all-or-nothing**: an implementation MUST NOT partially load a package that failed validation, even if some assets look fine in isolation.
@@ -344,9 +344,9 @@ See `[../demo/examples/demo-package/](../demo/examples/demo-package/)` for a com
 ```
 
 Unfolding `asset-final` shows exactly what produced it: an AI upscale of a raw, non-AI camera plate, a non-AI style reference asset, and a non-AI licensed stock plate — a transparent, traceable chain from final deliverable back to its origins. `asset-final` carries timecodes, so it is understood to have been placed in the final show; the assets behind it do not, since they are intermediate/leaf material rather than final-show placements. `asset-stock-ref` has no `mediaPath` at all — its licensed stock media could not be redistributed inside the package — but it is still a fully documented, fully conformant asset: its `reference.label` and `metadata` record what it was even without a viewable file. In the full demo package, `asset-style-ref` is also referenced by a second asset, illustrating that the lineage is a graph, not a tree, and that a package documents many such lineages side by side, not just one.
-### 7.2 Simplified package
+### 7.2 Simple package
 
-A simplified package answers "who used which AI tool" and records the declaration the vendor made. The statements below are illustrations only — this specification defines none.
+A simple package answers "who used which AI tool" and records the declaration the vendor made. The statements below are illustrations only — this specification defines none.
 
 ```json
 {
@@ -354,7 +354,7 @@ A simplified package answers "who used which AI tool" and records the declaratio
   "package": {
     "id": "3b1f6a52-7c4d-4e0a-9f11-0a1b2c3d4e5f",
     "packageName": "vendorxyz_PO-4471_ep03",
-    "documentationLevel": "simplified",
+    "documentationLevel": "simple",
     "createdAt": "2026-11-11T10:00:00Z",
     "createdBy": { "name": "Vendor XYZ GmbH", "email": "delivery@vendorxyz.com" }
   },
@@ -383,4 +383,4 @@ A simplified package answers "who used which AI tool" and records the declaratio
 }
 ```
 
-Three tools were used (two models of one provider, one from another); only the third records a separate user, the others default to the package creator. The declaration carries the exact wording that was agreed to; the `id` prefixes show which policy each statement comes from. `assets` is empty because a simplified package documents tools, not individual assets.
+Three tools were used (two models of one provider, one from another); only the third records a separate user, the others default to the package creator. The declaration carries the exact wording that was agreed to; the `id` prefixes show which policy each statement comes from. `assets` is empty because a simple package documents tools, not individual assets.

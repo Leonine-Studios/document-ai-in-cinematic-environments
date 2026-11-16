@@ -12,7 +12,7 @@ export interface Contact {
 
 export type DaiceVersion = "0.1.0" | "0.2.0";
 
-export type DocumentationLevel = "detailed" | "simplified";
+export type DocumentationLevel = "detailed" | "simple";
 
 export interface PackageMetadata {
   id: string;

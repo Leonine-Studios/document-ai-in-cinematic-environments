@@ -23,7 +23,7 @@
     },
     "tools": {
       "type": "array",
-      "description": "The AI tools (provider/model pairs) used for the work this package covers. MUST be present with at least one entry when package.documentationLevel is \"simplified\". Optional in a detailed package. Requires daiceVersion 0.2.0.",
+      "description": "The AI tools (provider/model pairs) used for the work this package covers. MUST be present with at least one entry when package.documentationLevel is \"simple\". Optional in a detailed package. Requires daiceVersion 0.2.0.",
       "items": {
         "$ref": "#/$defs/tool"
       }
@@ -37,7 +37,7 @@
     },
     "assets": {
       "type": "array",
-      "description": "Every documented asset in this package, flat, regardless of how many there are or how deep their reference chains go. Nesting is expressed only through references between assets, not by nesting this array. MAY be empty (for example a simplified package that documents tools only). Deliberately an array (not a map keyed by id) so that duplicate ids can be detected during validation instead of being silently collapsed by JSON parsing.",
+      "description": "Every documented asset in this package, flat, regardless of how many there are or how deep their reference chains go. Nesting is expressed only through references between assets, not by nesting this array. MAY be empty (for example a simple package that documents tools only). Deliberately an array (not a map keyed by id) so that duplicate ids can be detected during validation instead of being silently collapsed by JSON parsing.",
       "items": {
         "$ref": "#/$defs/asset"
       }
@@ -103,9 +103,9 @@
         "documentationLevel": {
           "enum": [
             "detailed",
-            "simplified"
+            "simple"
           ],
-          "description": "The documentation level of this package. A missing value means \"detailed\". \"simplified\" documents which AI tools were used (see top-level tools) instead of per-asset provenance. Requires daiceVersion 0.2.0."
+          "description": "The documentation level of this package. A missing value means \"detailed\". \"simple\" documents which AI tools were used (see top-level tools) instead of per-asset provenance. Requires daiceVersion 0.2.0."
         }
       }
     },
@@ -325,7 +325,7 @@
             "type": "object",
             "properties": {
               "documentationLevel": {
-                "const": "simplified"
+                "const": "simple"
               }
             },
             "required": [

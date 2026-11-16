@@ -1,14 +1,14 @@
 {
   "daiceVersion": "0.2.0",
   "package": {
-    "id": "valid-simplified",
-    "packageName": "Valid: simplified package",
+    "id": "valid-simple",
+    "packageName": "Valid: simple package",
     "createdAt": "2026-07-01T09:00:00Z",
     "createdBy": {
       "name": "Vendor XYZ",
       "email": "delivery@vendorxyz.example"
     },
-    "documentationLevel": "simplified"
+    "documentationLevel": "simple"
   },
   "assets": [],
   "tools": [

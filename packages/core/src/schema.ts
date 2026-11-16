@@ -18,7 +18,7 @@ export const contactSchema = z
 export const DAICE_VERSIONS = ["0.1.0", "0.2.0"] as const;
 export const CURRENT_DAICE_VERSION = "0.2.0" as const;
 
-export const documentationLevelSchema = z.enum(["detailed", "simplified"]);
+export const documentationLevelSchema = z.enum(["detailed", "simple"]);
 
 export const packageMetadataSchema = z
   .object({
@@ -116,11 +116,11 @@ export const daicePackageSchema = z
   })
   .strict()
   .superRefine((pkg, ctx) => {
-    if (pkg.package.documentationLevel === "simplified" && (!pkg.tools || pkg.tools.length === 0)) {
+    if (pkg.package.documentationLevel === "simple" && (!pkg.tools || pkg.tools.length === 0)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["tools"],
-        message: "tools is required (at least one entry) when documentationLevel is simplified",
+        message: "tools is required (at least one entry) when documentationLevel is simple",
       });
     }
     if (pkg.daiceVersion === "0.1.0") {

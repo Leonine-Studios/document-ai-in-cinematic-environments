@@ -1,0 +1,14 @@
+{
+  "daiceVersion": "0.2.0",
+  "package": {
+    "id": "invalid-simple-missing-tools",
+    "packageName": "Invalid: simple without tools",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    },
+    "documentationLevel": "simple"
+  },
+  "assets": []
+}

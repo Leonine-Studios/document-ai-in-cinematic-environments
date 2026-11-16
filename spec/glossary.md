@@ -18,6 +18,18 @@ Files in the package's `assets/` folder are review and handoff proxies, not full
 **`aiGenerated` flag**
 A boolean on every asset stating whether it was produced by an AI generation process. `false` is a deliberate, explicit statement that an asset is not AI-generated, allowing a lineage chain to terminate in verifiably non-AI material.
 
+**Documentation level**
+`package.documentationLevel`: `detailed` (the default; per-asset provenance and lineage) or `simple` (which AI tools were used, and by whom, with no per-asset documentation). Which level a delivery needs is agreed outside the package. See `spec/README.md` §0.
+
+**Tool**
+One entry of the top-level `tools` array: a provider/model pair used for the work a package covers, optionally with the contacts who used it (`usedBy`). Required (at least one) in a simple package; optional in a detailed one. See `spec/README.md` §2.6.
+
+**Declaration**
+An entry of the top-level `declarations` array: who declared (`declaredBy`), when (`declaredAt`), and a list of statements they agreed to about the conditions under which AI tools were used. Independent of the documentation level; optional (MAY) at both. See `spec/README.md` §2.7.
+
+**Statement**
+One item of a declaration: `{ id, text }`. Every listed statement was agreed to. `text` is the exact, authoritative wording, so a package explains itself without an external catalog; the `id`'s issuer prefix (`<issuer>:<key>`) groups statements by the policy they come from. The specification defines no statements; they are agreed between the parties outside the package.
+
 **Reference**
 A link from one asset to another asset in the same package that was used to create it: `{ "assetId": "...", "label": "..." }`. There is only one kind of reference — non-AI inputs are assets, not a separate reference type. The same asset MAY be referenced by more than one other asset. A writer SHOULD include review media (`mediaPath`) for a referenced asset whenever it can be obtained, but a referenced asset with no `mediaPath` — documented only through its other fields, `label`, and `metadata` — is fully conformant when media isn't available (e.g. licensed stock, or a client-held source file). See `spec/README.md` §2.3 and §2.5.
 

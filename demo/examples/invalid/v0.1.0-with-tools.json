@@ -1,0 +1,19 @@
+{
+  "daiceVersion": "0.1.0",
+  "package": {
+    "id": "invalid-v010-with-tools",
+    "packageName": "Invalid: 0.1.0 with tools",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    }
+  },
+  "assets": [],
+  "tools": [
+    {
+      "provider": "Magnific",
+      "model": "ExampleModel v2"
+    }
+  ]
+}

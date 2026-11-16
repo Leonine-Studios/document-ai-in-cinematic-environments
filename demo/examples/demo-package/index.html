@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <!--
-    Generic DAICE-Chain Viewer — reference implementation, v1.0.0 (see the
+    Generic DAICE-Chain Viewer — reference implementation (see the
     js-viewer-version tags below, kept in sync with VIEWER_VERSION in
     viewer.js). Freestanding and self-contained by design: copy this file
     plus viewer.css and viewer.js as-is into your own package export
@@ -76,12 +76,29 @@
           </div>
           <div>
             <dt>Assets</dt>
-            <dd id="pkg-assetcount"></dd>
+            <div>
+            <dt>Level</dt>
+            <dd id="pkg-level"></dd>
+          </div>
+          <dd id="pkg-assetcount"></dd>
           </div>
         </dl>
       </header>
 
       <main>
+        <section id="tools-view" class="extra-section" hidden>
+          <h2>AI tools used</h2>
+          <div class="table-scroll">
+            <table class="simple-table">
+              <thead><tr><th>Provider</th><th>Model</th><th>Used by</th></tr></thead>
+              <tbody id="tools-body"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="declarations-view" class="extra-section" hidden>
+          <h2>Declarations</h2>
+          <div id="declarations-list"></div>
+        </section>
         <section id="table-view">
           <div class="table-toolbar">
             <p class="table-toolbar__hint">
@@ -116,7 +133,7 @@
 
   <script id="daice-chain-data" type="application/json" hidden>
 {
-  "daiceVersion": "1.0",
+  "daiceVersion": "0.1.0",
   "package": {
     "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
     "packageName": "vendorxyz_contract123",

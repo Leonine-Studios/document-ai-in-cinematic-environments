@@ -15,11 +15,17 @@ export const contactSchema = z
   })
   .strict();
 
+export const DAICE_VERSIONS = ["0.1.0", "0.2.0"] as const;
+export const CURRENT_DAICE_VERSION = "0.2.0" as const;
+
+export const documentationLevelSchema = z.enum(["detailed", "simple"]);
+
 export const packageMetadataSchema = z
   .object({
     id: z.string().min(1),
     packageName: z.string().min(1),
     description: z.string().optional(),
+    documentationLevel: documentationLevelSchema.optional(),
     createdAt: z.string().datetime({ offset: true }),
     createdBy: contactSchema,
     metadata: z.record(z.unknown()).optional(),
@@ -75,10 +81,61 @@ export const assetSchema = assetBaseSchema.superRefine((asset, ctx) => {
   }
 });
 
-export const daicePackageSchema = z
+export const toolSchema = z
   .object({
-    daiceVersion: z.literal("0.1.0"),
-    package: packageMetadataSchema,
-    assets: z.array(assetSchema),
+    provider: z.string().min(1),
+    model: z.string().min(1),
+    usedBy: z.array(contactSchema).optional(),
+    metadata: z.record(z.unknown()).optional(),
   })
   .strict();
+
+export const statementSchema = z
+  .object({
+    id: z.string().min(1),
+    text: z.string().min(1),
+  })
+  .strict();
+
+export const declarationSchema = z
+  .object({
+    declaredBy: contactSchema,
+    declaredAt: z.string().datetime({ offset: true }),
+    statements: z.array(statementSchema).min(1),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
+export const daicePackageSchema = z
+  .object({
+    daiceVersion: z.enum(DAICE_VERSIONS),
+    package: packageMetadataSchema,
+    tools: z.array(toolSchema).optional(),
+    declarations: z.array(declarationSchema).optional(),
+    assets: z.array(assetSchema),
+  })
+  .strict()
+  .superRefine((pkg, ctx) => {
+    if (pkg.package.documentationLevel === "simple" && (!pkg.tools || pkg.tools.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["tools"],
+        message: "tools is required (at least one entry) when documentationLevel is simple",
+      });
+    }
+    if (pkg.daiceVersion === "0.1.0") {
+      if (pkg.tools !== undefined) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["tools"], message: 'tools requires daiceVersion "0.2.0"' });
+      }
+      if (pkg.declarations !== undefined) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["declarations"], message: 'declarations requires daiceVersion "0.2.0"' });
+      }
+      if (pkg.package.documentationLevel !== undefined) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["package", "documentationLevel"],
+          message: 'documentationLevel requires daiceVersion "0.2.0"',
+        });
+      }
+    }
+  });

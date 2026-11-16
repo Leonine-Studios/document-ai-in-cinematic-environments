@@ -1,0 +1,55 @@
+{
+  "daiceVersion": "0.2.0",
+  "package": {
+    "id": "valid-detailed-with-tools",
+    "packageName": "Valid: detailed package with tools and declaration",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    },
+    "documentationLevel": "detailed"
+  },
+  "assets": [
+    {
+      "id": "asset-a",
+      "aiGenerated": true,
+      "provider": "Magnific",
+      "model": "ExampleModel v2",
+      "generatedBy": {
+        "name": "Ada Example"
+      },
+      "generatedAt": "2026-07-01T08:00:00Z",
+      "references": []
+    }
+  ],
+  "tools": [
+    {
+      "provider": "Magnific",
+      "model": "ExampleModel v2"
+    }
+  ],
+  "declarations": [
+    {
+      "declaredBy": {
+        "name": "Ada Example",
+        "email": "ada@vendorxyz.example"
+      },
+      "declaredAt": "2026-07-01T09:05:00Z",
+      "statements": [
+        {
+          "id": "acme:no-training-on-inputs",
+          "text": "No AI tool used for this work trains on the input data provided to it."
+        },
+        {
+          "id": "streamco:no-inference-mainland-china",
+          "text": "No AI inference for this work runs in mainland China."
+        },
+        {
+          "id": "acme:gdpr-compliant",
+          "text": "Every AI tool used for this work is operated in compliance with the GDPR."
+        }
+      ]
+    }
+  ]
+}

@@ -26,4 +26,12 @@ jobs:
 
       - run: npm ci
       - run: npm test --workspace=packages/core
-      - run: npm publish --workspace=packages/core --access public
+      # setup-node writes an npmrc that authenticates with NODE_AUTH_TOKEN.
+      # That classic token is no longer allowed to publish, and while it is
+      # set npm will not use the OIDC trusted publisher. Drop it for this step.
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ""
+        run: |
+          printf 'registry=https://registry.npmjs.org/\n' > "$RUNNER_TEMP/.npmrc"
+          npm publish --workspace=packages/core --access public

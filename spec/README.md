@@ -1,8 +1,6 @@
-# DAICE-Chain Specification v0.2.0 (working draft)
+# DAICE-Chain Specification v0.2.0
 
-> **Working draft — not yet published.** v0.2.0 adds a *simple* documentation level, a list of AI tools, and declarations. It is being worked out and may still change. The last published version is v0.1.0; every v0.1.0 package remains valid under this draft (see §6).
-
-This is the normative specification for DAICE-Chain (Document AI in cinematic environments). v0.1.0 was published as a first public pre-release; this document is the v0.2.0 working draft. It is intended to be understandable on its own, without reading any code. The machine-readable version of everything below lives in `[schema/daice.schema.json](schema/daice.schema.json)` and MUST stay consistent with this document — if you change one, change the other in the same commit.
+This is the normative specification for DAICE-Chain (Document AI in cinematic environments). v0.2.0 is the current version. v0.1.0 was the first public pre-release; every v0.1.0 package remains valid (see §6). This document is intended to be understandable on its own, without reading any code. The machine-readable version of everything below lives in `[schema/daice.schema.json](schema/daice.schema.json)` and MUST stay consistent with this document — if you change one, change the other in the same commit.
 
 Key words "MUST", "MUST NOT", "SHOULD", "SHOULD NOT", and "MAY" in this document are to be interpreted as in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119): they describe requirement levels for implementations, not this document's own writing style.
 
@@ -262,9 +260,9 @@ A tool that never re-exports has no round-trip obligation at all.
 
 ## 6. Versioning
 
-This document describes DAICE-Chain **v0.2.0** (working draft). `daiceVersion` in every `daice.json` MUST match a version this specification defines: `"0.1.0"` or `"0.2.0"`.
+This document describes DAICE-Chain **v0.2.0**. `daiceVersion` in every `daice.json` MUST match a version this specification defines: `"0.1.0"` or `"0.2.0"`.
 
-**v0.1.0 → v0.2.0** is purely additive: it adds `package.documentationLevel`, `tools`, and `declarations`. The version number still changes, because v0.1.0 readers reject unknown fields and would otherwise fail with a confusing "unrecognized property" error; with a new number they refuse the file cleanly as an unknown version. Readers that support `"0.2.0"` MUST also accept `"0.1.0"`. A v0.1.0 package is read as a detailed package with no tools and no declarations. Writers MUST write `"0.2.0"` as soon as they use any new field, and MAY relabel a 0.1.0 package as 0.2.0 when re-exporting it; nothing else in it needs to change. Future minor versions of this specification MUST be additive (new optional fields) wherever possible; breaking changes require a new major `daiceVersion`.
+**v0.1.0 → v0.2.0** is purely additive: it adds `package.documentationLevel` (`"detailed"` or `"simple"`), `tools`, and `declarations`. The version number still changes, because v0.1.0 readers reject unknown fields and would otherwise fail with a confusing "unrecognized property" error; with a new number they refuse the file cleanly as an unknown version. Readers that support `"0.2.0"` MUST also accept `"0.1.0"`. A v0.1.0 package is read as a detailed package with no tools and no declarations. Writers MUST write `"0.2.0"` as soon as they use any new field, and MAY relabel a 0.1.0 package as 0.2.0 when re-exporting it; nothing else in it needs to change. Future minor versions of this specification MUST be additive (new optional fields) wherever possible; breaking changes require a new major `daiceVersion`.
 
 Relaxing a requirement from MUST to SHOULD (as this document did for `prompt`, see §2.3) is a backward-compatible clarification, not a breaking change: every package that satisfied the stricter rule still satisfies the looser one, so no version change is needed for it.
 

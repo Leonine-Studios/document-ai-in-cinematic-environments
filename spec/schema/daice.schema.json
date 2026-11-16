@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://daice-chain.dev/schema/daice.schema.json",
   "title": "DAICE-Chain Package",
-  "description": "A DAICE-Chain (Document AI in cinematic environments) package: metadata plus, depending on its documentation level, a set of documented assets and their reference lineage and/or a list of AI tools, with optional declarations. v0.2.0 working draft.",
+  "description": "A DAICE-Chain (Document AI in cinematic environments) package: metadata plus, depending on its documentation level, a set of documented assets and their reference lineage and/or a list of AI tools, with optional declarations. Specification v0.2.0.",
   "type": "object",
   "additionalProperties": false,
   "required": [

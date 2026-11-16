@@ -14,12 +14,12 @@ It exists because AI-assisted media production is now common in film, video, and
 
 | Path | What it is |
 |------|------------|
-| [`spec/`](spec/) | The specification only: human-readable spec, JSON Schema, conformance rules, and glossary. The normative artifact at v0.1.0 — no example packages or tooling live here |
+| [`spec/`](spec/) | The specification only: human-readable spec, JSON Schema, conformance rules, and glossary. The normative artifact — no example packages or tooling live here |
 | [`packages/core/`](packages/core/) | `@leoninestudios/daice-chain-core` — TypeScript types, Zod validators, lineage resolution, and table flattening shared by every tool in this repo |
 | [`demo/`](demo/) | Everything that shows the specification in action — illustrative, and free to change independently of `spec/` (see `demo/`'s own layout below) |
 | [`demo/viewer/`](demo/viewer/) | The static, read-only HTML viewer that a package MAY optionally include (see "Viewer" vs. "Editor" in [`spec/glossary.md`](spec/glossary.md)). Self-contained plain JS with no build step and no `@leoninestudios/daice-chain-core` dependency, versioned independently (`VIEWER_VERSION` in `viewer.js`, shown in its own UI), and designed to be copy/pasted as-is into your own export pipeline |
 | [`demo/examples/`](demo/examples/) | A reference example package (`demo-package/`, viewer included) and deliberately-invalid fixtures (`invalid/`) used by `@leoninestudios/daice-chain-core`'s own test suite |
-| [`demo/editor/`](demo/editor/) | A proof-of-concept editor (Vite + React) for authoring, importing, and exporting DAICE-Chain packages. Not intended for production use — it exists to prove the specification is implementable and to generate demo packages |
+| [`demo/editor/`](demo/editor/) | A proof-of-concept editor (Vite + React) for authoring, importing, and exporting DAICE-Chain packages. Not intended for production use — it exists to prove the specification is implementable and to generate demo packages. It cannot author a simple package from scratch; importing one and exporting it again keeps `documentationLevel`, `tools`, and `declarations` |
 | [`demo/magnific-chrome-extension/`](demo/magnific-chrome-extension/) | A Chrome extension example that captures generation metadata from the Magnific web app and hands it to the editor, showing how a real platform can feed DAICE-Chain |
 
 ## The specification, in short
@@ -34,7 +34,7 @@ A **package** (`daice.json`) is typically one vendor delivery: minimal top-level
 
 `createdBy` and `generatedBy` are both a `contact` object (`{ name, email? }`) — named `contact`, not `person`, because it's just as often a company (e.g. the delivering vendor) as it is an individual.
 
-**v0.2.0 draft additions.** `package.documentationLevel` is `"detailed"` (default; everything above) or `"simple"`, which documents only which AI tools were used (`tools`: provider/model pairs, optionally with `usedBy`) and needs no per-asset documentation. A top-level `declarations` list records statements a party agreed to about the conditions the tools were used under (for example, that no tool trains on input data). The specification defines no statements; it only defines the container.
+A package also has a documentation level. `package.documentationLevel` is `"detailed"` (the default; everything above) or `"simple"`, which documents only which AI tools were used (`tools`: provider/model pairs, optionally with `usedBy`) and needs no per-asset documentation. A top-level `declarations` list records statements a party agreed to about the conditions the tools were used under (for example, that no tool trains on input data). The specification defines no statements; it only defines the container.
 
 Because references point to other entries in the same `assets` list, a package captures a full directed lineage graph — the same input can be shared by multiple downstream assets — not just a flat record or a single tree. See [`spec/README.md`](spec/README.md) for the full normative specification.
 
@@ -51,15 +51,15 @@ my-package.daice.zip
 
 ## Status
 
-> **v0.2.0 is a working draft on this branch and is not published.** It adds a simple documentation level (which AI tools were used, and by whom), a top-level `tools` list, and `declarations`. Every v0.1.0 package stays valid. See [`spec/README.md`](spec/README.md).
+**v0.2.0** is the current version of the specification and of `@leoninestudios/daice-chain-core`. It adds a simple documentation level (which AI tools were used, and by whom), a top-level `tools` list, and `declarations`. Every v0.1.0 package stays valid. See [`spec/README.md`](spec/README.md) and [`CHANGELOG.md`](CHANGELOG.md).
 
-This is a proof-of-concept implementation of DAICE-Chain v0.1.0 — the first public pre-release of the specification and reference tooling, ready for use and open for discussion. The specification in [`spec/`](spec/) is the normative artifact; the editor and extension are illustrative and may change independently.
+The specification in [`spec/`](spec/) is the normative artifact. The editor, viewer, and extension are illustrative and may change independently.
 
 ## Stewardship
 
 DAICE-Chain was created by **Nova Unit**, part of **Leonine Studios**, part of **Mediawan Group**.
 
-Nova Unit maintains this repository and the v0.1.0 specification as a proof-of-concept and reference implementation. The specification is the primary deliverable; the editor, viewer, and extension examples exist to show that it is implementable.
+Nova Unit maintains this repository and the specification as a proof-of-concept and reference implementation. The specification is the primary deliverable; the editor, viewer, and extension examples exist to show that it is implementable.
 
 ## Collaboration
 

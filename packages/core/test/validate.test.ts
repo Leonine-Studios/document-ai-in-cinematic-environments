@@ -75,4 +75,58 @@ describe("validatePackage", () => {
     const result = validatePackage({ ...pkg, unexpectedField: true });
     expect(result.valid).toBe(false);
   });
+
+  describe("v0.2.0: documentation levels, tools, declarations", () => {
+    it("accepts a simple package and a detailed one with tools and a declaration", () => {
+      expect(validatePackage(validFixture("simple-package.json")).valid).toBe(true);
+      expect(validatePackage(validFixture("detailed-with-tools-and-declaration.json")).valid).toBe(true);
+    });
+
+    it("still accepts a v0.1.0 package", () => {
+      expect(validatePackage(validFixture("legacy-v0.1.0.json")).valid).toBe(true);
+    });
+
+    it("rejects a simple package with no tools, or an empty tools list", () => {
+      for (const name of ["simple-missing-tools.json", "simple-empty-tools.json"]) {
+        const result = validatePackage(invalidFixture(name));
+        expect(result.valid).toBe(false);
+        expect(result.errors.some((e) => e.path === "tools")).toBe(true);
+      }
+    });
+
+    it("rejects new fields in a package labelled 0.1.0", () => {
+      const result = validatePackage(invalidFixture("v0.1.0-with-tools.json"));
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => e.path === "tools")).toBe(true);
+    });
+
+    it("rejects a tool without a model, with a path", () => {
+      const result = validatePackage(invalidFixture("tool-missing-model.json"));
+      expect(result.errors.some((e) => e.path === "tools[0].model")).toBe(true);
+    });
+
+    it("rejects a declaration without declaredBy and an unknown documentation level", () => {
+      expect(
+        validatePackage(invalidFixture("declaration-missing-declared-by.json")).errors.some(
+          (e) => e.path === "declarations[0].declaredBy",
+        ),
+      ).toBe(true);
+      expect(
+        validatePackage(invalidFixture("unknown-documentation-level.json")).errors.some(
+          (e) => e.path === "package.documentationLevel",
+        ),
+      ).toBe(true);
+    });
+
+    it("rejects duplicate statement ids within a declaration", () => {
+      const result = validatePackage(invalidFixture("declaration-duplicate-statement-id.json"));
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => e.path === "declarations[0].statements[1].id")).toBe(true);
+    });
+
+    it("names both supported versions for an unknown daiceVersion", () => {
+      const result = validatePackage(invalidFixture("unknown-version.json"));
+      expect(result.errors[0]?.message).toContain('"0.1.0" and "0.2.0"');
+    });
+  });
 });

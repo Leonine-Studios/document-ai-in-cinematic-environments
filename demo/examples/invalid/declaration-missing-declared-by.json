@@ -1,0 +1,28 @@
+{
+  "daiceVersion": "0.2.0",
+  "package": {
+    "id": "invalid-declaration-missing-declared-by",
+    "packageName": "Invalid: declaration without declaredBy",
+    "createdAt": "2026-07-01T09:00:00Z",
+    "createdBy": {
+      "name": "Vendor XYZ",
+      "email": "delivery@vendorxyz.example"
+    }
+  },
+  "assets": [],
+  "declarations": [
+    {
+      "declaredAt": "2026-07-01T09:05:00Z",
+      "statements": [
+        {
+          "id": "acme:no-training-on-inputs",
+          "text": "No AI tool used for this work trains on the input data provided to it."
+        },
+        {
+          "id": "streamco:no-inference-mainland-china",
+          "text": "No AI inference for this work runs in mainland China."
+        }
+      ]
+    }
+  ]
+}

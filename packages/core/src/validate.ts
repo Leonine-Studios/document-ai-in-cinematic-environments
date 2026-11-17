@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { daicePackageSchema } from "./schema.js";
+import { DAICE_VERSIONS, daicePackageSchema } from "./schema.js";
 import type { DaicePackage, ValidationError, ValidationResult } from "./types.js";
 
 function zodPathToString(path: (string | number)[]): string {
@@ -17,8 +17,11 @@ function zodPathToString(path: (string | number)[]): string {
 function zodIssuesToErrors(issues: z.ZodIssue[]): ValidationError[] {
   return issues.map((issue) => {
     const path = zodPathToString(issue.path);
-    if (issue.code === z.ZodIssueCode.invalid_literal && path === "daiceVersion") {
-      return { path, message: `unrecognized daiceVersion: ${JSON.stringify(issue.received)}. This implementation only supports "0.1.0".` };
+    if (path === "daiceVersion" && (issue.code === z.ZodIssueCode.invalid_enum_value || issue.code === z.ZodIssueCode.invalid_literal)) {
+      return {
+        path,
+        message: `unrecognized daiceVersion: ${JSON.stringify((issue as { received?: unknown }).received)}. This implementation only supports ${DAICE_VERSIONS.map((v) => `"${v}"`).join(" and ")}.`,
+      };
     }
     return { path, message: issue.message };
   });
@@ -89,6 +92,19 @@ function checkReferentialIntegrity(pkg: DaicePackage): ValidationError[] {
   for (const asset of pkg.assets) {
     if (color.get(asset.id) === WHITE) visit(asset.id, []);
   }
+
+  pkg.declarations?.forEach((declaration, declIndex) => {
+    const seen = new Set<string>();
+    declaration.statements.forEach((statement, stIndex) => {
+      if (seen.has(statement.id)) {
+        errors.push({
+          path: `declarations[${declIndex}].statements[${stIndex}].id`,
+          message: `duplicate statement id "${statement.id}" — statement ids must be unique within a declaration`,
+        });
+      }
+      seen.add(statement.id);
+    });
+  });
 
   return errors;
 }

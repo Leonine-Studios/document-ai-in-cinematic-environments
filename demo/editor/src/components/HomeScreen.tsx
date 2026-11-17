@@ -11,7 +11,7 @@ import { ErrorPanel } from "@/components/ErrorPanel";
 function blankPackage(): DaicePackage {
   const now = new Date().toISOString();
   return {
-    daiceVersion: "0.1.0",
+    daiceVersion: "0.2.0",
     package: {
       id: generateId("package"),
       packageName: "",
